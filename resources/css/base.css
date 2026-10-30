@@ -1,0 +1,448 @@
+/* ===========================================================================
+   Base layer — reset, typography, and shared primitives.
+   Focus, the skip link, the page container, buttons, the eyebrow and republic
+   rule, the section heading, and the empty state. Anything used by exactly one
+   section of the landing page lives in site.css instead.
+   =========================================================================== */
+
+/* The reset sits in Tailwind's `base` layer, not outside it. Unlayered CSS
+   outranks every layer, so an unlayered `button { color: inherit }` quietly
+   beat the `text-primary-foreground` utility on each shadcn button and left
+   white glyphs on the mint fill. Element defaults belong under the utilities
+   that are meant to override them. */
+@layer base {
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    html {
+        /* One theme, so the browser is told rather than left to guess: without
+           this, a visitor whose OS is set to dark gets dark scrollbars and
+           dark form controls against a white page. */
+        color-scheme: light;
+        scroll-behavior: smooth;
+        scroll-padding-top: calc(var(--header-h) + var(--s-3));
+        background: var(--bg);
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        margin: 0;
+        min-width: 320px;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--font-sans);
+        font-size: var(--t-md);
+        line-height: 1.6;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* Headings use the display face. Tight tracking at display sizes only. */
+    h1,
+    h2,
+    h3,
+    h4 {
+        margin: 0;
+        color: var(--fg);
+        font-family: var(--font-display);
+        font-weight: 600;
+        line-height: 1.15;
+        letter-spacing: -0.015em;
+        text-wrap: balance;
+    }
+    h1 {
+        font-size: clamp(var(--t-3xl), 4.5vw, var(--t-4xl));
+        letter-spacing: -0.025em;
+    }
+    h2 {
+        font-size: clamp(var(--t-2xl), 3vw, var(--t-3xl));
+        letter-spacing: -0.02em;
+    }
+    h3 {
+        font-size: var(--t-xl);
+    }
+    h4 {
+        font-size: var(--t-lg);
+    }
+
+    p {
+        margin: 0;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+        font: inherit;
+        color: inherit;
+    }
+
+    button,
+    a,
+    select,
+    [role='button'] {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    img,
+    svg {
+        max-width: 100%;
+    }
+}
+
+/* Dates, hotlines, and figures must align down a column. */
+time,
+.hotline-number,
+.figure-value {
+    font-variant-numeric: tabular-nums;
+}
+
+/* --- Focus -------------------------------------------------------------- */
+:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: var(--r-sm);
+}
+/* One piece of chrome sits on deep green — the masthead bar — and it needs the
+   flag's yellow instead of the default gold. Measured on that green: gold
+   reaches 2.4:1, which is a ring you cannot find, and yellow 5.4:1. Everywhere
+   else is a light surface, where gold clears 3:1 on both --surface and --wash
+   and yellow would be the invisible one.
+
+   Scoped to the bar itself and not to the whole header, so the light identity
+   strip above it keeps the gold. The collapsed nav panel is a descendant of
+   the bar but hangs below it on white, so site.css takes the yellow back off
+   again at that breakpoint. */
+.site-navbar :focus-visible {
+    outline-color: var(--ph-yellow);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Skip link — a government site must be keyboard-first. */
+.skip-link {
+    position: absolute;
+    z-index: 100;
+    top: var(--s-2);
+    left: var(--s-2);
+    padding: var(--s-2) var(--s-4);
+    border-radius: var(--r-md);
+    background: var(--primary);
+    color: var(--primary-fg);
+    font-size: var(--t-base);
+    font-weight: 600;
+    transform: translateY(-200%);
+    transition: transform var(--d-micro) var(--ease-out);
+}
+.skip-link:focus-visible {
+    transform: translateY(0);
+}
+
+/* --- Layout ------------------------------------------------------------- */
+.wrap {
+    width: min(var(--container), calc(100% - 2 * var(--s-5)));
+    margin-inline: auto;
+}
+
+/* --- Eyebrow + the republic rule ---------------------------------------
+   The signature detail: a short rule at the start of a label. It is the
+   tricolour in the masthead, and a single gold stroke everywhere else.
+   ----------------------------------------------------------------------- */
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    margin: 0;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: var(--t-sm);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.eyebrow::before {
+    width: 22px;
+    height: 3px;
+    flex: none;
+    background: var(--accent-mark);
+    content: '';
+    transform-origin: left;
+    transition: transform var(--d-draw) var(--ease-out) 120ms;
+}
+/* Inside a heading that has not scrolled in yet, the stroke waits at zero
+   width and draws across as the heading arrives. `data-shown` is set by
+   Reveal when the block enters the viewport. */
+:is(.section-heading, .report-intro, .figures-intro, .mayor-letter):not(
+        [data-shown]
+    )
+    .eyebrow::before {
+    transform: scaleX(0);
+}
+/* The emergency band is the only block that overrides the gold stroke: there
+   the label is a warning, so the rule carries the warning colour too. */
+.eyebrow--danger {
+    color: var(--danger);
+}
+.eyebrow--danger::before {
+    background: var(--danger);
+}
+
+.republic-rule {
+    display: flex;
+    height: 3px;
+    overflow: hidden;
+}
+.republic-rule > span {
+    flex: 1;
+}
+.republic-rule > span:nth-child(1) {
+    background: var(--ph-blue);
+}
+.republic-rule > span:nth-child(2) {
+    background: var(--ph-red);
+}
+.republic-rule > span:nth-child(3) {
+    background: var(--ph-yellow);
+}
+
+/* --- Section heading ----------------------------------------------------
+   Set like a broadsheet section front: the label and the title on the left,
+   the standfirst on the right, bottom-aligned to the title, with a hairline
+   under the pair. Stacked, the three lines left two-thirds of every heading
+   row empty and every section opened with the same left-heavy block; across
+   the measure, the title gets the room to be set large and the standfirst
+   reads as the caption to it.
+   ----------------------------------------------------------------------- */
+.section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-5);
+    margin-bottom: clamp(var(--s-5), 3.5vw, var(--s-7));
+}
+.section-heading > div {
+    position: relative;
+    display: grid;
+    flex: 1;
+    align-items: end;
+    gap: var(--s-3) clamp(var(--s-6), 6vw, var(--s-9));
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    padding-bottom: clamp(var(--s-5), 3vw, var(--s-6));
+    border-bottom: 1px solid var(--line);
+}
+.section-heading > div > * {
+    grid-column: 1;
+}
+/* The section's colour runs along the first stretch of the hairline, drawn
+   in from the left once the heading arrives: the one moment each section
+   announces itself, and the place its palette is introduced. */
+.section-heading > div::after {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: min(160px, 30%);
+    height: 2px;
+    background: var(--accent-mark);
+    content: '';
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-draw) var(--ease-out) 200ms;
+}
+.section-heading[data-shown] > div::after {
+    transform: scaleX(1);
+}
+.section-heading h2 {
+    max-width: 18ch;
+    margin: 0;
+    font-size: clamp(var(--t-3xl), 3.6vw, var(--t-4xl));
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    text-wrap: balance;
+}
+/* Not the eyebrow: it is a <p> too, and this selector outranks `.eyebrow`, so
+   without the exclusion every section label came out grey at body size. */
+.section-heading p:not(.eyebrow) {
+    max-width: 46ch;
+    margin: 0;
+    color: var(--ink-500);
+    font-size: var(--t-md);
+    line-height: 1.6;
+    text-wrap: pretty;
+}
+.section-heading > div > p:not(.eyebrow) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    justify-self: end;
+}
+
+/* --- Buttons ------------------------------------------------------------
+   Every variant carries hover, focus-visible, active, disabled, and busy.
+   ----------------------------------------------------------------------- */
+.button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px; /* touch target */
+    gap: var(--s-2);
+    padding: 10px var(--s-4);
+    border: 1px solid transparent;
+    border-radius: var(--r-md);
+    font-size: var(--t-base);
+    font-weight: 650;
+    text-align: center;
+    cursor: pointer;
+    transition:
+        background-color var(--d-micro) var(--ease-out),
+        border-color var(--d-micro) var(--ease-out),
+        color var(--d-micro) var(--ease-out),
+        transform var(--d-micro) var(--ease-out);
+}
+.button:active {
+    transform: translateY(1px);
+}
+/* A trailing chevron leans the way the button goes. */
+.button svg {
+    transition: transform var(--d-micro) var(--ease-out);
+}
+.button:hover:not(:disabled) svg:last-child {
+    transform: translateX(3px);
+}
+.button:disabled,
+.button[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.55;
+    transform: none;
+}
+.button[data-busy='true'] {
+    cursor: progress;
+}
+
+.button-primary {
+    background: var(--primary);
+    color: var(--primary-fg);
+}
+.button-primary:hover:not(:disabled) {
+    background: var(--primary-700);
+}
+
+.button-secondary {
+    border-color: var(--line-strong);
+    background: var(--surface);
+    color: var(--primary);
+}
+.button-secondary:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--primary-50);
+}
+
+/* A demonstration marker, not a brand flourish — it must read as a caveat. */
+.demo-text {
+    display: inline-flex;
+    /* fit-content, not max-content: both stop the marker stretching to fill a
+       grid or flex track, but max-content also raises the element's min-content
+       contribution to the full length of its text, which pushed the track —
+       and the page — wider than the viewport wherever the caveat was a sentence
+       rather than a word. */
+    width: fit-content;
+    align-items: center;
+    gap: var(--s-1);
+    padding: 3px var(--s-2);
+    border: 1px solid color-mix(in srgb, var(--warn) 30%, transparent);
+    border-radius: var(--r-sm);
+    background: var(--warn-50);
+    color: var(--warn);
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+/* --- Empty state --------------------------------------------------------
+   The page has nothing to show and has to say so. A dashed outline reads as
+   a space waiting to be filled rather than a panel that failed to load.
+   ----------------------------------------------------------------------- */
+.empty-state {
+    display: flex;
+    min-height: 240px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+    padding: var(--s-6) var(--s-4);
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--r-lg);
+    background: var(--wash);
+    color: var(--ink-500);
+    text-align: center;
+}
+.empty-state > svg {
+    width: 28px;
+    height: 28px;
+    color: var(--ink-400);
+}
+.empty-state h3 {
+    margin: var(--s-2) 0 0;
+    font-size: var(--t-xl);
+}
+.empty-state p {
+    max-width: 44ch;
+    margin: 0 0 var(--s-3);
+}
+
+/* --- Reduced motion ----------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (max-width: 700px) {
+    .wrap {
+        width: calc(100% - 2 * var(--s-4));
+    }
+    .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: var(--s-2);
+    }
+}
+
+/* The standfirst returns under the title once the two columns would each be
+   too narrow to hold a line of either. */
+@media (max-width: 860px) {
+    .section-heading > div {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .section-heading > div > p:not(.eyebrow) {
+        grid-column: 1;
+        grid-row: auto;
+        justify-self: start;
+    }
+}

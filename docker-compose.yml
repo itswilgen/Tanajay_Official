@@ -1,0 +1,57 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        env_file:
+            - .env
+        ports:
+            - '${APP_PORT:-8000}:8000'
+        volumes:
+            - app-storage:/var/www/html/storage
+        depends_on:
+            postgres:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+        restart: unless-stopped
+
+    postgres:
+        image: postgres:17-alpine
+        environment:
+            POSTGRES_DB: ${DB_DATABASE:-tanjay_portal}
+            POSTGRES_USER: ${DB_USERNAME:-tanjay}
+            POSTGRES_PASSWORD: ${DB_PASSWORD:-local-development-only}
+        ports:
+            - '${DB_PORT_HOST:-5432}:5432'
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        healthcheck:
+            test:
+                [
+                    'CMD-SHELL',
+                    'pg_isready -U ${DB_USERNAME:-tanjay} -d ${DB_DATABASE:-tanjay_portal}',
+                ]
+            interval: 5s
+            timeout: 5s
+            retries: 12
+        restart: unless-stopped
+
+    redis:
+        image: redis:7-alpine
+        command: ['redis-server', '--appendonly', 'yes']
+        ports:
+            - '${REDIS_PORT_HOST:-6379}:6379'
+        volumes:
+            - redis-data:/data
+        healthcheck:
+            test: ['CMD', 'redis-cli', 'ping']
+            interval: 5s
+            timeout: 3s
+            retries: 12
+        restart: unless-stopped
+
+volumes:
+    app-storage:
+    postgres-data:
+    redis-data:
