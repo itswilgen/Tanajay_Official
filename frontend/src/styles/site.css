@@ -1,0 +1,3829 @@
+/* ===========================================================================
+   Public site — chrome and home page.
+
+   The header is two bands, following Philippine government practice: a
+   national identity strip, then the city's own bar behind the tricolour rule
+   carrying the seal, the full legal name, and the menu on one row.
+
+   Only the bar sticks, which is the reason the seal sits in it. In the earlier
+   three-band header the branding had a row of its own above the menu; it
+   scrolled away, and what followed a resident down a long notice was the
+   GOVPH wordmark — the national register, set in the heaviest type on the
+   page, with no sign of Tanjay. The city now holds its own bar, the national
+   link sits in the strip where that register belongs, and the chrome costs
+   71px instead of 199px.
+   =========================================================================== */
+
+/* --- National identity strip -------------------------------------------- */
+.site-identity {
+    background: var(--wash);
+    border-bottom: 1px solid var(--line);
+    color: var(--ink-500);
+    font-size: var(--t-xs);
+}
+.site-identity-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    min-height: 32px;
+    padding-block: 4px;
+}
+.site-identity-official {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    gap: 6px;
+    min-width: 0;
+}
+.site-identity-official > svg {
+    flex: none;
+    color: var(--primary);
+}
+
+/* The link to the national portal. A wordmark, so it keeps the heavier weight
+   and the hairline that sets a wordmark apart from running text — but at the
+   strip's size, because this is the national register, not the city's. */
+.govph-mark {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    margin-left: 2px;
+    padding-left: var(--s-3);
+    border-left: 1px solid var(--line-strong);
+    color: var(--ink-700);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    transition: color var(--d-micro) var(--ease-out);
+}
+.govph-mark:hover {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.site-identity-links {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    flex: none;
+}
+.identity-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding-block: 5px;
+    transition: color var(--d-micro) var(--ease-out);
+}
+.identity-link:hover {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Philippine Standard Time, in line rather than stacked: the strip is one
+   line of small type and the clock is a part of it, not a panel.
+
+   It sheds its parts instead of disappearing (see the media queries): the
+   date goes first, then the label, so a phone still shows the time. The
+   markup is three spans for exactly that reason. `tabular-nums` keeps the
+   seconds ticking without the line shifting width underneath them. */
+.pst-clock {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    gap: 7px;
+    padding-right: var(--s-4);
+    border-right: 1px solid var(--line-strong);
+}
+.pst-label {
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.pst-clock time {
+    display: inline-flex;
+    gap: 6px;
+    color: var(--ink-700);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* --- The city's bar -----------------------------------------------------
+   Seal, legal name, and the menu across one row, on the city's green. It is
+   the only part of the chrome that sticks, so a resident reading a notice
+   keeps the city's identity in view and can change section or search from
+   where they are.
+
+   The depth is the register, not the hue: a deep official field behind the
+   seal is what PH LGU and national mastheads do, and it separates the city's
+   own identity from the white page of content below far more plainly than a
+   hairline could. The gradient runs along the bar rather than down it, so it
+   reads as one field lit from the left and not as a band with a horizon in it.
+
+   The city's wave artwork sits under that gradient as texture. Three layers,
+   in paint order: a warm bloom at the lockup end, the scrim sweep, then the
+   artwork beneath. It is in this order deliberately — the artwork's own right
+   end is a chartreuse that cannot carry white type, so the bar's own colour
+   stays responsible for contrast and the artwork contributes only the sweep of
+   its curves.
+
+   The sweep itself travels ember → burnt orange → ochre (see --masthead-from
+   and the stops after it in tokens.css). Four stops rather than three because
+   the bar is a 1200px strip and a short journey across that distance reads as
+   one flat colour with a seam in it; a long one reads as a lit field. The
+   angle is shallow for the same reason — 104deg puts the travel along the bar,
+   not down it, so there is no horizon line across a 68px row.
+
+   The bar and the footer are the orange fields: the page opens and closes on
+   the city's colour (--masthead-* here, --ember-* there) and the content sits
+   on paper between them. The figures band and the hero plate's wedge keep the
+   deep green (--field-*), because the seal and the issued banner artwork are
+   green and both of those sit underneath or beside that artwork. Two orange
+   fields bracket a document; one on every band would read as a repaint, which
+   is why nothing between the two ends carries it.
+   ----------------------------------------------------------------------- */
+.site-navbar {
+    position: sticky;
+    z-index: 40;
+    top: 0;
+    /* Opaque base first: every scrim above is translucent, so this is what
+       keeps the bar in the city's orange rather than transparent if the
+       texture 404s. */
+    background-color: var(--masthead-via);
+    background-image:
+        /* The bloom, pinned to the bottom-left so it rises behind the seal and
+           the city's name. Sized well past the bar so only the soft centre of
+           it is ever visible — a radial gradient small enough to show its own
+           edge inside a 68px strip would read as a smudge, not as light. */
+        radial-gradient(
+            120% 220% at 2% 118%,
+            var(--masthead-glow) 0%,
+            transparent 58%
+        ),
+        linear-gradient(
+            104deg,
+            color-mix(
+                    in srgb,
+                    var(--masthead-from) var(--masthead-scrim),
+                    transparent
+                )
+                0%,
+            color-mix(
+                    in srgb,
+                    var(--masthead-via) var(--masthead-scrim),
+                    transparent
+                )
+                34%,
+            color-mix(
+                    in srgb,
+                    var(--masthead-mid) var(--masthead-scrim-end),
+                    transparent
+                )
+                68%,
+            color-mix(
+                    in srgb,
+                    var(--masthead-to) var(--masthead-scrim-end),
+                    transparent
+                )
+                100%
+        ),
+        var(--masthead-texture);
+    /* The artwork is a teal-to-chartreuse wave, and 20% of it shows through
+       the scrim at the lockup end. Under the old green bar those were the same
+       family; under an orange one, teal through orange is mud. `luminosity`
+       hands the bottom layer the bar's hue and saturation and keeps the
+       artwork's own lightness, so the waves still read as waves, in the bar's
+       colour, and every contrast figure tuned against their brightness still
+       holds. Only the texture blends — the bloom and the scrim stay `normal`,
+       in paint order. */
+    background-blend-mode: normal, normal, luminosity;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid var(--masthead-line);
+    transition: box-shadow var(--d-enter) var(--ease-out);
+}
+/* Once the strip has scrolled underneath it, the bar is floating over the
+   content rather than sitting at the top of the page, and says so. A shadow
+   and not a height change: the bar occupies flow, so animating its size would
+   drag the whole page up and down with it. */
+.site-navbar.is-pinned {
+    box-shadow: var(--shadow-raised);
+}
+.site-navbar::before {
+    /* The republic rule, pinned to the top of the sticky element so it stays
+       visible once the identity strip has scrolled away. */
+    display: flex;
+    height: 3px;
+    content: '';
+    background: linear-gradient(
+        to right,
+        var(--ph-blue) 0 33.33%,
+        var(--ph-red) 33.33% 66.66%,
+        var(--ph-yellow) 66.66% 100%
+    );
+}
+/* Children stretch so a nav cell is the full height of the bar and its menu
+   can hang off the bar's own bottom edge. */
+.site-navbar-inner {
+    display: flex;
+    align-items: stretch;
+    gap: var(--s-5);
+    min-height: 68px;
+}
+
+.site-brand {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    min-width: 0;
+    gap: var(--s-3);
+}
+.site-brand .seal-slot {
+    width: 46px;
+    height: 46px;
+    /* The slot's default green is for the seal on a light surface. Here it is
+       on the bar's own green, where it would all but vanish — this is the
+       color the Landmark fallback glyph takes if the seal image fails. */
+    color: var(--masthead-ink);
+}
+.site-brand .seal-slot svg {
+    width: 24px;
+    height: 24px;
+}
+.site-brand-copy {
+    display: grid;
+    min-width: 0;
+    line-height: 1.16;
+}
+/* The legal name carries the bar, so it gets the display face and the only
+   negative tracking in the header, with the province under it as a caption —
+   the two together are a lockup, which is what keeps the row from reading as a
+   toolbar with a logo bolted on.
+
+   The caption is set plainly rather than in the strip's uppercase small caps:
+   "Province of Negros Oriental" tracked out in caps comes to the same width as
+   the name above it, and a caption as wide as its title stops being a caption.
+   It is also the order the official lockup uses. */
+/* Two names, one shown at a time — see the 374px query at the foot of this
+   file for why the short one exists and what it costs. `display: none` and not
+   a visibility trick, so only the visible one is in the accessibility tree and
+   a screen reader never hears the city named twice. */
+.site-brand-name--short {
+    display: none;
+}
+.site-brand-copy strong {
+    color: var(--masthead-ink);
+    font-family: var(--font-display);
+    font-size: var(--t-lg);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+    transition: color var(--d-micro) var(--ease-out);
+}
+/* The national line sits above the city and is deliberately the quietest type
+   in the lockup: it is the register the city governs under, not the subject of
+   the page. Caps and tracking are what make 10px read as a legal mark rather
+   than as shrunken body copy.
+
+   The rule divides the two names. It takes the city's gold rather than a
+   neutral hairline so the division belongs to the seal beside it, and it is
+   the full width of the grid column — i.e. of the longest line — so the three
+   lines square off into one block.
+
+   The gold is --gold-on-dark, not --gold-bright: on the bar's green the
+   brighter gold only reaches 2.4:1 and the rule would read as a smudge. This
+   one clears 4.3:1, comfortably past the 3:1 a non-text rule needs. */
+.site-brand-republic {
+    margin-bottom: 3px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--gold-on-dark);
+    color: var(--masthead-ink-muted);
+    font-size: var(--t-2xs);
+    font-weight: 600;
+    letter-spacing: 0.085em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.site-brand-province {
+    color: var(--masthead-ink-muted);
+    font-size: var(--t-xs);
+    white-space: nowrap;
+}
+/* Hover goes to gold, not to --primary: the link is sitting on --primary, so
+   the old hover color was the background it was printed on. */
+.site-brand:hover .site-brand-copy strong {
+    color: var(--gold-on-dark);
+}
+
+.seal-slot {
+    display: grid;
+    width: 54px;
+    height: 54px;
+    flex: none;
+    place-items: center;
+    color: var(--primary);
+}
+.seal-slot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.seal-slot svg {
+    width: 28px;
+    height: 28px;
+    stroke-width: 1.6;
+}
+.seal-slot--small {
+    width: 44px;
+    height: 44px;
+}
+.seal-slot--small svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* --- Primary navigation -------------------------------------------------
+   The menu is right-aligned on the same row as the lockup, and the signature
+   detail of the whole site does the work of separating one cell from the
+   next: the short rule. It is the gesture already carrying the section
+   eyebrows and the hero's seam, and here it draws itself under a cell on
+   hover, holds in the accent while a menu is open, and stays drawn under the
+   section a reader is in.
+
+   The vertical hairlines that used to divide the cells are gone. With the
+   seal in the same row they were one ruled grid too many — the row read as a
+   toolbar welded to the branding. One rule, moving, says more than six
+   standing still.
+   ----------------------------------------------------------------------- */
+.primary-nav {
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-end;
+    flex: 1;
+    min-width: 0;
+}
+.nav-item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: var(--s-3);
+    border: 0;
+    background: transparent;
+    color: var(--masthead-ink);
+    font-size: var(--t-base);
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color var(--d-micro) var(--ease-out),
+        color var(--d-micro) var(--ease-out);
+}
+/* The rule. It is the same gesture the active cell makes permanently, so
+   hovering previews where you would land rather than introducing a second,
+   unrelated highlight. Transform only, so it costs nothing to animate. */
+.nav-item::after {
+    position: absolute;
+    right: var(--s-2);
+    bottom: 0;
+    left: var(--s-2);
+    height: 2px;
+    background: var(--masthead-ink-muted);
+    transform: scaleX(0);
+    transition: transform var(--d-micro) var(--ease-out);
+    content: '';
+}
+.nav-item:hover::after {
+    transform: scaleX(1);
+}
+/* The label is already at full contrast on the bar, so hover cannot announce
+   itself by going brighter. It lifts a fill out of the green instead and draws
+   the rule. */
+.nav-item:hover {
+    background: var(--masthead-wash);
+}
+/* A cell is a tall flat target with no border to compress, so the press reads
+   as the fill deepening rather than as a transform. On the bar it deepens
+   toward black rather than toward grey, so it still reads as a press. */
+.nav-item:active {
+    background: var(--masthead-sunken);
+}
+
+/* The cells hold their width, so a narrow viewport wraps the row rather than
+   squeezing the section names. A group is a cell too: its heading is the
+   button, and the group wrapper is what its dropdown is positioned against. */
+.primary-nav > a,
+.nav-group {
+    position: relative;
+    flex: none;
+}
+.nav-group {
+    display: flex;
+    align-items: stretch;
+}
+/* A button does not inherit the page's type by default; the headings have to
+   match the Home link beside them exactly or the row reads as two controls. */
+.nav-group > .nav-item {
+    font-family: inherit;
+}
+.nav-caret {
+    flex: none;
+    margin-right: -2px;
+    color: var(--masthead-ink-muted);
+    transition: transform var(--d-micro) var(--ease-out);
+}
+/* Open, the heading draws the same rule the active page carries — in gold,
+   because it is a state and not a preview — and the caret turns over. Two
+   signals for one state, so neither the colour nor the glyph has to carry it
+   alone. */
+.nav-group.is-open > .nav-item {
+    background: var(--masthead-wash);
+}
+.nav-group.is-open > .nav-item::after {
+    background: var(--gold-on-dark);
+    transform: scaleX(1);
+}
+.nav-group.is-open .nav-caret {
+    transform: rotate(180deg);
+}
+
+/* The dropdown: the same white sheet the search results use, hanging flush
+   off the bar's bottom edge, so the bar has one way of opening downward
+   rather than two. Labels only, following the national menu convention, so
+   it is sized to the longest label — "Vision, Mission and Goals" — and not to
+   prose. */
+.nav-panel {
+    position: absolute;
+    z-index: 50;
+    top: 100%;
+    left: 0;
+    width: 272px;
+    padding: var(--s-2);
+    border: 1px solid var(--line);
+    border-top: 0;
+    border-radius: 0 0 var(--r-lg) var(--r-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-overlay);
+}
+/* The last heading sits next to the search field, and a sheet opening
+   rightward from it would run under the field and toward the edge of the
+   container. It opens leftward instead, back over the menu it belongs to. */
+.nav-group:last-child > .nav-panel {
+    right: 0;
+    left: auto;
+}
+/* White sheet, so the gold ring comes back from the bar's yellow — the same
+   inversion the search results and the collapsed menu make. */
+.nav-panel :focus-visible {
+    outline-color: var(--focus);
+}
+.nav-panel-list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    gap: 2px;
+    list-style: none;
+}
+/* The label and its tag share a line; a note, when there is one, takes the
+   line beneath. A button (the submenu heading) gets the same row, so the two
+   kinds of entry cannot be told apart by anything but the caret. */
+.nav-panel-link {
+    display: flex;
+    width: 100%;
+    min-height: 40px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2px var(--s-2);
+    padding: var(--s-2) var(--s-3);
+    border: 0;
+    border-radius: var(--r-md);
+    background: transparent;
+    color: var(--ink-700);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        background-color var(--d-micro) var(--ease-out),
+        color var(--d-micro) var(--ease-out);
+}
+.nav-panel-label {
+    font-size: var(--t-base);
+    font-weight: 600;
+}
+a.nav-panel-link:hover,
+.nav-sub-toggle:hover,
+.nav-sub.is-open > .nav-sub-toggle {
+    background: var(--primary-50);
+    color: var(--primary-700);
+}
+a.nav-panel-link:active,
+.nav-sub-toggle:active {
+    background: var(--sunken);
+}
+/* The legal basis, and whether the obligation is published. --gold is the
+   text-safe gold (5.3:1 on white), and the caps and tracking are what mark it
+   as a reference rather than a second label. */
+.nav-panel-note {
+    flex-basis: 100%;
+    color: var(--gold);
+    font-size: var(--t-2xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* A planned page. Quieter than a link, so a reader scanning for somewhere to
+   go reads past it — but --ink-500 still clears 5.8:1, because a page the
+   city has promised is information too, and greyed-out text that cannot be
+   read is not. No hover, no pointer: there is nothing to press. */
+.nav-panel-link.is-pending {
+    color: var(--ink-500);
+    cursor: default;
+}
+.nav-panel-soon {
+    padding: 2px 6px;
+    border-radius: var(--r-sm);
+    background: var(--gold-50);
+    color: var(--gold);
+    font-size: var(--t-2xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* A submenu opens to the side of its entry, the same sheet again, with its
+   top edge level with the entry that opened it so the eye moves across
+   rather than hunting down. */
+.nav-sub {
+    position: relative;
+}
+.nav-sub-caret {
+    flex: none;
+    color: var(--ink-400);
+    transition: transform var(--d-micro) var(--ease-out);
+}
+.nav-sub.is-open .nav-sub-caret {
+    color: var(--primary);
+}
+.nav-sub-list {
+    position: absolute;
+    z-index: 51;
+    top: calc(-1 * var(--s-2));
+    left: calc(100% + var(--s-2) + 1px);
+    display: grid;
+    width: 232px;
+    margin: 0;
+    padding: var(--s-2);
+    gap: 2px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-overlay);
+    list-style: none;
+}
+/* On the bar the active cell is marked, not recolored. Gold type would be the
+   obvious move and it is the wrong one: --gold-on-dark reaches 3.84:1 on the
+   mid stop, which is fine for a 3px rule but short of the 4.5:1 a 16px
+   label needs, and 16px/600 does not qualify as large text. So the label holds
+   white at full contrast and the gold goes into the mark underneath it, where
+   3:1 is the bar it has to clear. */
+.primary-nav > a.is-active {
+    color: var(--masthead-ink);
+}
+/* The active mark sits on the bottom edge of the cell, flush with the bar's
+   own border. Its hover rule takes the accent too, so passing over the page
+   you are already on does not grey out the mark. */
+.primary-nav > a.is-active::before {
+    position: absolute;
+    right: var(--s-2);
+    bottom: 0;
+    left: var(--s-2);
+    height: 3px;
+    background: var(--gold-on-dark);
+    content: '';
+}
+.primary-nav > a.is-active::after {
+    background: var(--gold-on-dark);
+}
+
+/* Only ever shown below 1180px, where it sits on the bar's orange — so it is
+   styled for the bar, not for the white panel it opens. */
+.menu-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid var(--masthead-line-strong);
+    border-radius: var(--r-md);
+    background: transparent;
+    color: var(--masthead-ink);
+    cursor: pointer;
+}
+.menu-toggle:hover {
+    border-color: var(--masthead-ink);
+    background: var(--masthead-wash);
+}
+.menu-toggle:active {
+    background: var(--masthead-sunken);
+}
+
+/* --- Search -------------------------------------------------------------
+   A field, not a magnifying glass that opens a dialogue. The field states what
+   can be searched in its own placeholder, which on a site whose index is one
+   page of services, notices and hotlines is the more useful thing to say: an
+   icon leaves a resident to guess the scope and find out by typing.
+
+   It sits at the end of the bar, which is the end the scrim holds hardest and
+   therefore the end with a dependable field behind the field's own 3:1 border.
+   The treatment is the one the menu toggle already uses — a hairline on the
+   green, a lifted fill on hover, a gold border when focused — so the bar has
+   one family of controls rather than a nav and a search that each look
+   borrowed from somewhere else.
+
+   The results are a white sheet hanging flush off the bar's bottom edge. Flush,
+   and with the bar's own corner radius continued, because the sheet is the bar
+   extending downward; a floating card with a gap above it is a second surface
+   and makes the reader place it.
+   ----------------------------------------------------------------------- */
+.site-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: none;
+}
+/* `contents` on the bar: the field belongs to the row and the sheet anchors to
+   .site-search above. The collapsed layout gives the wrapper a box of its
+   own — see the media query at the foot of this file. */
+.search-sheet {
+    display: contents;
+}
+
+/* Only ever shown below 700px, where the bar has no room left for a field. */
+.search-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid var(--masthead-line-strong);
+    border-radius: var(--r-md);
+    background: transparent;
+    color: var(--masthead-ink);
+    cursor: pointer;
+}
+.search-toggle:hover {
+    border-color: var(--masthead-ink);
+    background: var(--masthead-wash);
+}
+.search-toggle:active {
+    background: var(--masthead-sunken);
+}
+
+.search-form {
+    display: flex;
+    min-width: 0;
+}
+/* Sized to its placeholder, because writing the scope into the placeholder is
+   pointless if the field clips it. Measured: the text is 192px at this size
+   and the icon, padding and shortcut hint take 78, so 276px holds it with a
+   little air for the caret.
+
+   One width at every layout above 700px, and it fits each of them: the full
+   row is 269 + 518 + 276 plus two gaps, 1111px of the 1193 available at its
+   narrowest; the collapsed row at 701px is 269 + 276 + 44 plus two gaps, 637px
+   of 653. */
+.search-field {
+    position: relative;
+    display: flex;
+    width: 276px;
+    height: 40px;
+    align-items: center;
+    gap: var(--s-2);
+    padding-inline: var(--s-3);
+    border: 1px solid var(--masthead-line-strong);
+    border-radius: var(--r-md);
+    background: var(--masthead-wash);
+    color: var(--masthead-ink);
+    transition:
+        background-color var(--d-micro) var(--ease-out),
+        border-color var(--d-micro) var(--ease-out);
+}
+.search-field:hover {
+    background: rgb(255 255 255 / 18%);
+}
+/* The border carries the focus, in the accent, and the fill deepens with it.
+   The ring itself is drawn here rather than on the input: an outline on the
+   input alone would sit inside the field's own border and read as a box in a
+   box. base.css gives everything in the bar the flag's yellow, which is the
+   only ring that clears 3:1 on this green. */
+.search-field:focus-within {
+    border-color: var(--gold-on-dark);
+    background: rgb(255 255 255 / 20%);
+    outline: 2px solid var(--ph-yellow);
+    outline-offset: 2px;
+}
+.search-field-icon {
+    flex: none;
+    color: var(--masthead-ink-muted);
+}
+.search-input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--masthead-ink);
+    font: inherit;
+    font-size: var(--t-base);
+}
+.search-input::placeholder {
+    color: var(--masthead-ink-muted);
+}
+.search-input:focus-visible {
+    outline: none;
+}
+/* The field has its own clear button, which stays put and is a 24px target.
+   The native one appears only once there is text, moves as the text grows, and
+   cannot be styled onto this field. */
+.search-input::-webkit-search-cancel-button {
+    display: none;
+}
+
+.search-clear {
+    display: grid;
+    width: 24px;
+    height: 24px;
+    flex: none;
+    place-items: center;
+    border: 0;
+    border-radius: var(--r-full);
+    background: transparent;
+    color: var(--masthead-ink-muted);
+    cursor: pointer;
+}
+.search-clear:hover {
+    background: var(--masthead-wash);
+    color: var(--masthead-ink);
+}
+/* The keyboard shortcut, shown in the space the clear button will take. It is
+   a hint and not a control, so it is the quietest thing in the field — and it
+   is set in the body face, because a monospace key cap is a developer-tool
+   idiom and this is a city's masthead. */
+.search-hint {
+    display: grid;
+    min-width: 19px;
+    height: 19px;
+    flex: none;
+    place-items: center;
+    padding-inline: 4px;
+    border: 1px solid var(--masthead-line);
+    border-radius: var(--r-sm);
+    color: var(--masthead-ink-muted);
+    font-family: inherit;
+    font-size: var(--t-xs);
+    font-weight: 600;
+}
+
+.search-panel {
+    position: absolute;
+    z-index: 50;
+    top: 100%;
+    right: 0;
+    width: min(432px, calc(100vw - 2 * var(--s-5)));
+    max-height: min(68vh, 520px);
+    overflow-y: auto;
+    padding: var(--s-2);
+    border: 1px solid var(--line);
+    border-top: 0;
+    border-radius: 0 0 var(--r-lg) var(--r-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-overlay);
+    text-align: left;
+}
+/* The sheet is white and hanging off the bar, so everything inside it comes
+   back to ink — and to the gold focus ring, since the bar's yellow is 1.5:1 on
+   white. The same inversion the collapsed menu makes. */
+.search-panel :focus-visible {
+    outline-color: var(--focus);
+}
+.search-group + .search-group {
+    margin-top: var(--s-2);
+    padding-top: var(--s-2);
+    border-top: 1px solid var(--line);
+}
+.search-group-name {
+    margin: 0;
+    padding: var(--s-2) var(--s-3) 4px;
+    color: var(--ink-500);
+    font-size: var(--t-2xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.search-result {
+    display: grid;
+    min-height: 48px;
+    align-items: start;
+    gap: var(--s-3);
+    grid-template-columns: 16px minmax(0, 1fr);
+    padding: var(--s-2) var(--s-3);
+    border-radius: var(--r-md);
+    color: var(--ink-700);
+}
+.search-result > svg {
+    margin-top: 3px;
+    color: var(--ink-400);
+}
+.search-result-copy {
+    display: grid;
+    min-width: 0;
+    gap: 1px;
+}
+.search-result-copy strong {
+    font-size: var(--t-base);
+    font-weight: 600;
+}
+/* Two lines of the description, then a clamp. A notice standfirst can run to
+   four, and a result that tall stops being scannable against the ones above
+   it. */
+.search-result-copy small {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--ink-500);
+    font-size: var(--t-xs);
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+/* One highlight, driven by the keyboard and by the pointer alike: hovering
+   moves the same mark the arrow keys move, so there is never a hovered row and
+   a separately selected one disagreeing about where Enter will go. */
+.search-result.is-active {
+    background: var(--primary-50);
+    color: var(--primary-700);
+}
+.search-result.is-active > svg {
+    color: var(--primary);
+}
+
+.search-empty {
+    display: grid;
+    margin: 0;
+    gap: var(--s-1);
+    padding: var(--s-4) var(--s-3) var(--s-5);
+    color: var(--ink-500);
+    font-size: var(--t-sm);
+}
+.search-empty strong {
+    color: var(--fg);
+    font-size: var(--t-base);
+}
+
+/* --- Hero ---------------------------------------------------------------
+   Two layers that read as two regions. The Mayor's plate — the artwork the
+   City Information Office issues, with the green wedge, the ghosted
+   government centre and the portrait already flattened into it — holds the
+   left of the section; the photograph takes the right, starting exactly where
+   the plate's transparent wedge opens (see --hero-wedge) so its left edge
+   runs under the artwork's diagonal and the two share an edge the artwork
+   drew itself. Nothing here has to guess at that angle or re-cut it.
+
+   The layers still overlap rather than sitting in two columns, and they have
+   to: the wedge is a diagonal, so the photograph must pass behind the plate
+   to be revealed by it. What changed is how much of the photograph is in
+   play. It used to span the whole section, which meant the reader saw only
+   whichever tenth of it fell right of the artwork — see the note on
+   .hero-photo-frame.
+
+   The section's aspect ratio is the plate's. Hold that and the plate covers
+   the left exactly as drawn. Past --hero-max the ratio would make the banner
+   taller than a laptop viewport, so the height caps instead and the plate,
+   which is measured from that height, simply stops growing — the photograph
+   takes the width it gives up. That is the right trade on a wide screen: the
+   portrait stays the size it was drawn to be, and the city gets more frame.
+
+   `width: 100%` is what makes that trade actually happen. A ratio clamped by
+   max-height transfers back into the other axis: with the width left `auto`
+   the capped height re-derived the width through the ratio and the banner
+   stopped at 1398px, short of the viewport — 42px of dead ground at 1440 and
+   522px at 1920. Stating the width makes it definite, so the ratio only ever
+   runs width → height and the cap shortens the banner without narrowing it.
+   ----------------------------------------------------------------------- */
+.hero {
+    /* --hero-ratio and --hero-max are in tokens.css under Layout. They moved
+       there when the loading skeleton started reading them too: the skeleton
+       stands in for this banner and has to hold the same box, and two copies
+       of the artwork's ratio is exactly the drift that stretched the Mayor's
+       portrait once already. */
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    aspect-ratio: var(--hero-ratio);
+    max-height: var(--hero-max);
+    border-bottom: 1px solid var(--line);
+    background: var(--sunken);
+}
+
+.hero-plate {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    height: 100%;
+    aspect-ratio: var(--hero-ratio);
+    animation: plate-in var(--d-enter) var(--ease-out) both;
+    pointer-events: none;
+}
+@keyframes plate-in {
+    from {
+        opacity: 0;
+        transform: translateX(-14px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+/* `fill`, not `cover`: the box is given the artwork's own ratio just above, so
+   there is nothing to crop and filling is exact. It is only safe while
+   --hero-ratio matches the issued file — see the note there.
+
+   No `object-position`, and no `cover`: the artwork is an official plate whose
+   emblems sit along its foot and whose lettering reaches 91% of its width, so
+   there is no part of it that may be cropped to make a box fit. */
+.hero-plate-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+/* No seam, and no emblems laid over the plate.
+
+   The seam was a tapering gold ribbon drawn along the previous plate's
+   diagonal, at 38% to 49% of the artwork's width. The re-issued plate puts its
+   transparent wedge at 80% to 91% instead, so the ribbon no longer marked an
+   edge — it ran across the Mayor and the office's lettering. A decoration that
+   has lost the edge it was explaining is just a line on a portrait, so it is
+   gone rather than re-measured: this artwork draws its own sweep, and the
+   diagonal where it meets the photograph is the artwork's own alpha.
+
+   The two emblems were positioned at 31.5% of the plate for the same old
+   composition. This plate carries four emblems of its own along its foot — the
+   Tanjay city seal, the Transparency Seal, Bagong Pilipinas and Republika ng
+   Pilipinas — so the overlaid pair were duplicates sitting on top of the
+   office's own. The artwork is the authority on its own emblems. */
+
+/* --- Latest updates -----------------------------------------------------
+   The band directly beneath the banner. It replaced a panel of lead copy,
+   a live clock and an advisory card: the copy restated what the header bar
+   above it already says, and Philippine Standard Time is still on the page in
+   that bar (.pst-clock). The advisory card went to an alert strip above the
+   banner for a time; that strip has since been taken out too, and a notice an
+   office flags as urgent now reads as a row in the notices listing with the
+   rest.
+
+   What stands there now is what the city has done lately, built around the
+   cover rather than the headline. That is the one real difference between
+   this band and the notices listing further down the page: an office that
+   publishes a magazine issue or reports on a finished project issues artwork
+   for it, residents recognise that artwork from the city's own pages, and a
+   3:4 cover is a thing you look at in a way that a 16:9 banner cropped into
+   a row is not.
+
+   It keeps the brief's own frame — hairline rule along the bottom, the same
+   vertical rhythm, --surface behind it — so the page's palette sequence
+   below (sage, ivory, sea, clay, the dark figures band, civic, wine) begins
+   exactly where it did.
+   ----------------------------------------------------------------------- */
+.city-updates {
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+}
+/* The feature takes the wider column and the shelf the narrower one, with the
+   heading across both. Named areas rather than source order: at a phone width
+   the shelf moves under the feature, and an area map says that once instead
+   of restating the whole grid. */
+.city-updates-inner {
+    display: grid;
+    padding-block: clamp(var(--s-5), 4vw, var(--s-7));
+    gap: var(--s-5) var(--s-7);
+    grid-template-areas:
+        'head  head'
+        'panel shelf';
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+}
+.city-updates-head {
+    max-width: 62ch;
+    grid-area: head;
+}
+.city-updates-head h2 {
+    margin: var(--s-2) 0 var(--s-2);
+    font-size: clamp(var(--t-2xl), 2.8vw, var(--t-3xl));
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+}
+.city-updates-head p:last-child {
+    max-width: 52ch;
+    margin: 0;
+    color: var(--ink-500);
+    font-size: var(--t-md);
+    line-height: 1.55;
+}
+
+/* --- The feature --------------------------------------------------------
+   Cover left, copy right, as the city magazine's own promo page sets it.
+   The cover is given a fixed measure rather than a fraction of the column so
+   it stays a cover: let it track the column and it becomes a poster on a wide
+   screen and a stamp on a narrow one.
+   ----------------------------------------------------------------------- */
+.city-update {
+    grid-area: panel;
+}
+.city-update-sheet {
+    display: grid;
+    align-items: start;
+    gap: var(--s-5) var(--s-6);
+    grid-template-columns: clamp(164px, 20vw, 228px) minmax(0, 1fr);
+}
+/* The frame is 3:4 here. .poster-frame holds 16:9 because every other poster
+   on the site is issued at that ratio; this one is a magazine cover, and the
+   ratio is the frame's to state, not the artwork's to be cropped to. The lift
+   is the one raised surface in the band — a cover is a physical object, and
+   the shadow is what says so without a border doing the talking. */
+.city-update-cover {
+    --poster-ratio: 3 / 4;
+
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-raised);
+}
+.city-update-kicker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--s-2) var(--s-3);
+    margin: 0 0 var(--s-2);
+    color: var(--ink-500);
+    font-size: var(--t-xs);
+    font-variant-numeric: tabular-nums;
+}
+.city-update-category {
+    color: var(--accent);
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.city-update-body h3 {
+    margin: 0;
+    font-size: clamp(var(--t-xl), 2.2vw, var(--t-2xl));
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+.city-update-standfirst {
+    max-width: 52ch;
+    margin: var(--s-3) 0 var(--s-4);
+    color: var(--ink-600);
+    font-size: var(--t-md);
+    line-height: 1.6;
+}
+.city-update-more {
+    align-self: start;
+}
+/* The caret states which way the disclosure goes, and turns when it has gone
+   there. Paired with aria-expanded on the button, so the rotation is a second
+   carrier of the state and not the only one. */
+.city-update-chevron {
+    transition: transform var(--d-micro) var(--ease-out);
+}
+.city-update-chevron[data-open] {
+    transform: rotate(180deg);
+}
+/* The height animation is Motion's; overflow has to be clipped here or the
+   text spills out of the collapsing box on the way down. */
+.city-update-text {
+    overflow: hidden;
+}
+.city-update-text p {
+    max-width: 62ch;
+    margin: var(--s-4) 0 0;
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+    color: var(--ink-600);
+    font-size: var(--t-md);
+    line-height: 1.7;
+}
+
+/* --- The shelf ----------------------------------------------------------
+   The other covers, as the tabs of the feature above. Rows rather than a
+   grid of covers: the title has to be readable for the cover to be worth
+   picking up, and a row gives it a measure while the thumbnail stays a
+   recognisable sliver of the artwork.
+   ----------------------------------------------------------------------- */
+.city-update-shelf {
+    display: grid;
+    align-content: start;
+    gap: var(--s-1);
+    grid-area: shelf;
+}
+.city-update-thumb {
+    position: relative;
+    display: grid;
+    align-items: center;
+    padding: var(--s-3) var(--s-3) var(--s-3) var(--s-4);
+    border: 1px solid transparent;
+    border-radius: var(--r-md);
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    gap: var(--s-4);
+    grid-template-columns: 46px minmax(0, 1fr);
+    text-align: left;
+    transition:
+        background-color var(--d-micro) var(--ease-out),
+        border-color var(--d-micro) var(--ease-out);
+}
+.city-update-thumb:hover {
+    border-color: var(--line);
+    background: var(--wash);
+}
+/* The selected row carries a fill and a rule. Neither is colour alone:
+   aria-selected is what assistive technology reads, and the title's weight
+   changes with it for a reader who sees the fill but not the hue. */
+.city-update-thumb[aria-selected='true'] {
+    border-color: var(--line);
+    background: var(--wash);
+}
+.city-update-thumb-cover {
+    --poster-ratio: 3 / 4;
+
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+}
+.city-update-thumb-copy {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+.city-update-thumb-category {
+    color: var(--ink-500);
+    font-size: var(--t-2xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+/* Two lines, then clipped. A cover's title is a headline and some run long;
+   three lines of it would make one row twice the height of its neighbours
+   and break the shelf's rhythm. */
+.city-update-thumb-title {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--ink-700);
+    font-size: var(--t-sm);
+    font-weight: 600;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+.city-update-thumb[aria-selected='true'] .city-update-thumb-category {
+    color: var(--gold);
+}
+.city-update-thumb[aria-selected='true'] .city-update-thumb-title {
+    color: var(--fg);
+    font-weight: 700;
+}
+/* The gold rule that travels between rows. It is laid on the row's left edge
+   inside the padding, which is why the row's inline padding is asymmetric. */
+.city-update-marker {
+    position: absolute;
+    top: var(--s-2);
+    bottom: var(--s-2);
+    left: 0;
+    width: 3px;
+    border-radius: 0 var(--r-sm) var(--r-sm) 0;
+    background: var(--gold-bright);
+}
+
+/* The photograph's panel: from the plate's wedge to the right edge, the full
+   height of the banner.
+
+   It used to be `inset: 0` — the photograph laid across the whole section with
+   the plate over its left. That is the composition the artwork implies, but it
+   spends the photograph badly. The plate is 877px wide at the height cap and
+   opaque until 79.8% of itself, so the reader only ever sees the part of the
+   photograph that happens to fall right of x 700. With `cover` across a
+   1425x439 section, a 2048x1536 photograph was drawn 1425x1069 and cropped to
+   the middle 41% of its height — and then four fifths of that was behind the
+   artwork. About a tenth of each photograph reached the reader, and never the
+   middle of it, which is where a photographer puts the subject.
+
+   Starting the panel at the wedge makes the visible region the whole region.
+   The same photograph is now drawn 727x545 in a 727x439 box: centred, 81% of
+   it on screen, and its left edge tucked under the artwork's diagonal so the
+   composition still reads as one piece rather than as two panels butted
+   together. `cover` stays — the office's slides range from 1.33 to 1.71 in
+   ratio and a panel that letterboxed would put grey bars beside half of them.
+   ------------------------------------------------------------------------- */
+.hero-photo-frame {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    left: var(--hero-wedge);
+    overflow: hidden;
+    background: var(--sunken);
+}
+.hero-photo {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    animation: hero-in 700ms var(--ease-out) both;
+    will-change: opacity, transform;
+}
+.hero-photo-outgoing {
+    z-index: 0;
+    animation: hero-out 700ms ease-in both;
+}
+.hero-photo-current {
+    z-index: 1;
+}
+@keyframes hero-in {
+    from {
+        opacity: 0;
+        transform: scale(1.04);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+@keyframes hero-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* --- Hero pause control -------------------------------------------------
+   The only thing laid over the photograph. The banner advances on its own,
+   and WCAG 2.2.2 requires that a reader be able to stop it; this is that
+   mechanism, and it is nothing more than that.
+
+   It brings its own small dark disc rather than relying on the photograph
+   behind it. The slides come from the Information Office and their tone is
+   unknown at build time — a white glyph straight on a bright sky would be a
+   contrast bet taken once per slide. The disc is the deep green the rest of
+   the page uses for its dark field, so it reads as the city's own mark on the
+   photograph rather than as a media player's.
+
+   Top-right, and that follows from the artwork rather than from taste. The
+   issued plate's transparent wedge is widest at the top — it opens at 79.8%
+   of the width there and closes to 91.2% at the foot — so the top-right
+   corner is photograph at every width, while the bottom-right corner is
+   artwork once the plate is as wide as the frame (anything from 541px to
+   about 877px), and that is where the office's emblems sit. A pause button
+   over a national emblem is not a placement a government page should ship.
+   The stacked phone layout moves it back down, where the photograph is its
+   own row beneath the plate.
+   ----------------------------------------------------------------------- */
+.hero-pause {
+    position: absolute;
+    z-index: 3;
+    top: var(--s-4);
+    right: var(--s-4);
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid var(--on-dark-mark);
+    border-radius: var(--r-full);
+    background: color-mix(in srgb, var(--primary-900) 78%, transparent);
+    color: var(--on-dark);
+    cursor: pointer;
+    transition:
+        background-color var(--d-micro) var(--ease-out),
+        border-color var(--d-micro) var(--ease-out),
+        transform var(--d-micro) var(--ease-out);
+}
+.hero-pause:hover {
+    border-color: var(--on-dark);
+    background: var(--primary-900);
+}
+.hero-pause:active {
+    transform: scale(0.96);
+}
+/* A ring that has to survive any photograph: white, with the disc's own deep
+   green showing either side of it. The site's gold ring is tuned for white
+   paper, and on a sunlit plaza it would vanish exactly where the reader needs
+   to see where focus went. */
+.hero-pause:focus-visible {
+    outline: 2px solid var(--on-dark);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--primary-900);
+}
+
+/* Hero fallback when no slides are published — the default state on a fresh
+   install. The plate still carries the city's identity, so only the missing
+   photograph needs explaining.
+
+   It stacks instead of taking the right-hand half of the frame. The issued
+   plate is as wide as the frame from 541px up to about 877px, so a message
+   laid in that half would be behind the artwork — the empty state would be
+   invisible on exactly the installs that have nothing published yet. A row
+   of its own is always readable, and the banner is only as tall as it needs
+   to be. */
+.hero--plate-only {
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: auto;
+    max-height: none;
+    background: var(--wash);
+}
+.hero--plate-only .hero-plate {
+    position: relative;
+    width: 100%;
+    max-width: calc(var(--hero-max) * var(--hero-ratio));
+    height: auto;
+    min-height: 0;
+    aspect-ratio: auto;
+    flex: none;
+}
+.hero--plate-only .hero-plate-art {
+    height: auto;
+}
+.hero-plate-fallback {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-height: 160px;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-3);
+    padding: var(--s-6);
+    border-top: 1px solid var(--line);
+    color: var(--ink-500);
+    font-size: var(--t-base);
+    text-align: center;
+    text-wrap: balance;
+}
+.hero-plate-fallback svg {
+    width: 40px;
+    height: 40px;
+    color: var(--ink-400);
+}
+
+/* --- Generic public section --------------------------------------------- */
+.site-section {
+    padding-block: clamp(var(--s-7), 6vw, var(--s-9));
+    scroll-margin-top: calc(var(--header-h) + var(--s-3));
+}
+
+/* --- Section palettes ---------------------------------------------------
+   Each section sets its colour once, here, as the accent variables from
+   tokens.css; its eyebrow, heading rule, tags, tiles, markers and focus ring
+   all read those, so a section's components never name a colour family
+   themselves. The focus ring follows the accent because the site's gold
+   ring drops to 2.96:1 on these bands, and every -700 clears 5.6:1.
+
+   The rhythm down the page: three tinted bands in a row — sage, ivory, sea
+   — for the part of the page a resident reads, white with a coloured accent
+   for the parts they scan, the dark figures band between them, and
+   parchment under the records.
+   ----------------------------------------------------------------------- */
+.site-section--sage {
+    --accent: var(--sage-700);
+    --accent-mark: var(--sage-500);
+    --accent-soft: var(--sage-100);
+    --band: var(--sage-50);
+    --focus: var(--sage-700);
+}
+/* The Mayor's own colour is the plate's gold, so the band is ivory and the
+   accent stays gold: --gold on --gold-50 is 4.9:1. */
+.site-section--ivory {
+    --accent: var(--gold);
+    --accent-mark: var(--gold-bright);
+    --accent-soft: var(--gold-50);
+    --band: var(--gold-50);
+    --focus: var(--gold);
+}
+.site-section--sea {
+    --accent: var(--sea-700);
+    --accent-mark: var(--sea-500);
+    --accent-soft: var(--sea-100);
+    --band: var(--sea-50);
+    --focus: var(--sea-700);
+}
+.site-section--clay {
+    --accent: var(--clay-700);
+    --accent-mark: var(--clay-500);
+    --accent-soft: var(--clay-100);
+}
+/* Blue and gold, the Republic's pairing, for the people who serve it. The
+   portrait discs take the blue too, with the gold initials kept. */
+.site-section--civic {
+    --accent: var(--civic-700);
+    --accent-mark: var(--civic-500);
+    --accent-soft: var(--civic-100);
+    --portrait-from: var(--civic-700);
+    --portrait-to: var(--civic-900);
+}
+.site-section--wine {
+    --accent: var(--wine-700);
+    --accent-mark: var(--wine-500);
+    --accent-soft: var(--wine-100);
+    --band: var(--wine-50);
+    --focus: var(--wine-700);
+}
+/* The tinted bands fade toward white as they go down, so each opens on its
+   colour at full strength and the seam to the next section is a change of
+   hue rather than a hard edge between two flat fills. The hairline at the
+   top is the band's own stroke at low strength, not a neutral grey. */
+.site-section--sage,
+.site-section--ivory,
+.site-section--sea,
+.site-section--wine {
+    border-top: 1px solid
+        color-mix(in srgb, var(--accent-mark) 22%, transparent);
+    background: linear-gradient(
+        180deg,
+        var(--band) 0%,
+        color-mix(in srgb, var(--band) 45%, var(--surface)) 100%
+    );
+}
+
+/* --- Service shortcuts -------------------------------------------------
+   The reason most people open a city site: do one specific task. Numbered
+   because these are procedures, not features.
+   ----------------------------------------------------------------------- */
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-4);
+}
+.service-card {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: hidden;
+    gap: var(--s-2);
+    padding: var(--s-5);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    transition:
+        border-color var(--d-micro) var(--ease-out),
+        box-shadow var(--d-micro) var(--ease-out),
+        transform var(--d-micro) var(--ease-out);
+}
+/* The cover runs to the card's edges, out through its padding, and the
+   card's own rounded corners clip it. Scoped to the card so it outranks the
+   shared frame's `margin: 0`, which comes later in this file. */
+.service-card > .service-cover {
+    width: calc(100% + 2 * var(--s-5));
+    margin: calc(-1 * var(--s-5)) calc(-1 * var(--s-5)) var(--s-2);
+    border-bottom: 1px solid var(--line);
+}
+/* With the cover drawing the pictogram large, the small icon tile would
+   only repeat it, so the number stands alone. A cover that fails to load
+   is removed, and the tile comes back with it. */
+.service-cover + .service-card-top .service-card-icon {
+    display: none;
+}
+.service-card:is(:hover, :focus-within) .service-cover img {
+    transform: scale(1.03);
+}
+.service-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-raised);
+    transform: translateY(-2px);
+}
+/* A green rule draws in across the top edge on hover, from the left, the
+   same direction the arrow moves: the card says where the click goes. */
+.service-card::before {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: var(--s-5);
+    left: var(--s-5);
+    height: 3px;
+    border-radius: 0 0 var(--r-sm) var(--r-sm);
+    background: var(--primary);
+    content: '';
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-enter) var(--ease-out);
+}
+.service-card:hover::before,
+.service-card:focus-within::before {
+    transform: scaleX(1);
+}
+.service-card:hover .service-card-icon {
+    background: var(--primary);
+    color: var(--primary-fg);
+}
+.service-card-link svg {
+    transition: transform var(--d-micro) var(--ease-out);
+}
+.service-card:hover .service-card-link svg {
+    transform: translateX(3px);
+}
+.service-card-top {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+}
+.service-card-icon {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    flex: none;
+    place-items: center;
+    border-radius: var(--r-md);
+    background: var(--primary-50);
+    color: var(--primary);
+    transition:
+        background-color var(--d-micro) var(--ease-out),
+        color var(--d-micro) var(--ease-out);
+}
+.service-card-number {
+    color: var(--ink-400);
+    font-family: var(--font-display);
+    font-size: var(--t-xl);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+}
+.service-card h3 {
+    margin-top: var(--s-2);
+    font-size: var(--t-lg);
+}
+/* The title anchor covers the card, so the whole tile is one target and the
+   accessible name is still just the title. */
+.service-card h3 a::after {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    content: '';
+}
+.service-card:focus-within {
+    border-color: var(--primary);
+}
+.service-card p {
+    flex: 1;
+    color: var(--ink-500);
+    font-size: var(--t-base);
+    line-height: 1.5;
+}
+.service-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: var(--s-2);
+    color: var(--primary);
+    font-size: var(--t-base);
+    font-weight: 650;
+}
+.service-card:hover .service-card-link {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* --- Latest notices: one lead and a ruled list --------------------------
+   Deliberately not four equal cards. Equal cards say every notice carries
+   equal weight, which is never true of a city's output: one thing is the
+   news and the rest is the record. The lead gets the photograph and the
+   standfirst; the record gets a dated line each, which is also how a reader
+   scans for the one item that concerns them.
+   ----------------------------------------------------------------------- */
+.notice-lead-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(var(--s-5), 4vw, var(--s-7));
+}
+/* A panel, not a target. There is no detail page to open, so the lead has no
+   hover or focus treatment: a card that lifts under the cursor promises a
+   click, and the only honest thing to promise here is the text itself. */
+.notice-lead {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+}
+/* --- Posters ------------------------------------------------------------
+   One frame for every poster on the page: the service covers, the lead
+   notice, the record thumbnails, the soonest event and each programme.
+   Posters are made 16:9 for
+   the city's page, so the frame is 16:9 too and nothing is cropped off their
+   edges. It holds that shape before the file arrives, so nothing jumps.
+
+   As its block arrives the artwork settles from a slight enlargement, the
+   same beat as the block's own rise, so the poster lands with the text
+   instead of popping in after it. Only the service covers answer the
+   cursor, with a slight push-in alongside their card's lift, because only
+   the service cards open something; a zoom on the others would promise a
+   click that goes nowhere.
+   ----------------------------------------------------------------------- */
+/* 16:9 is the shape the city's pubmats are made in, so it is the default — but
+   a placement can say otherwise by setting `--poster-ratio`, and a magazine
+   cover does.
+
+   It is a custom property rather than an `aspect-ratio` the modifier
+   overrides, because that is what the modifiers used to do and it did not
+   work: `.city-update-cover { aspect-ratio: 3 / 4 }` sits 560 lines above this
+   rule with exactly the same specificity, so this one won on order alone and
+   every magazine cover in the updates band was cropped to a letterbox — the
+   shelf chips worst of all, a 46px-wide cover drawn 24px tall inside a 61px
+   box. A value set on the element always beats one inherited from here, no
+   matter which rule is written first. */
+.poster-frame {
+    margin: 0;
+    aspect-ratio: var(--poster-ratio, 16 / 9);
+    overflow: hidden;
+    background: var(--sunken);
+}
+.poster-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--d-draw) var(--ease-out);
+}
+:is(.service-card, .notice-lead, .events, .program):not([data-shown])
+    .poster-frame
+    img {
+    transform: scale(1.06);
+}
+/* The record's thumbnails, at the size of two lines of title. */
+.notice-row:has(.notice-row-poster) {
+    grid-template-columns: 54px minmax(0, 1fr) 112px;
+}
+.notice-row-poster {
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+}
+/* The soonest event's poster runs across both columns above its date. */
+.event-poster {
+    grid-column: 1 / -1;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+}
+.program-poster {
+    border-bottom: 1px solid var(--line);
+}
+.notice-lead-body {
+    display: grid;
+    gap: var(--s-3);
+    padding: var(--s-5);
+}
+/* Nothing to show. Rather than a grey rectangle where the photograph would
+   have been, the lead becomes a type-led panel: the gold rule at the head
+   carries the weight the image was carrying, and the headline takes the size
+   it would have had to share. */
+.notice-lead--plain {
+    border-top: 3px solid var(--accent-mark);
+}
+.notice-lead--plain .notice-lead-body {
+    gap: var(--s-4);
+    padding: clamp(var(--s-5), 3vw, var(--s-7));
+}
+.notice-lead--plain h3 {
+    font-size: clamp(var(--t-2xl), 3vw, var(--t-3xl));
+}
+.notice-lead--plain .notice-lead-standfirst {
+    font-size: var(--t-lg);
+}
+.notice-kicker {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    margin: 0;
+    color: var(--ink-500);
+    font-size: var(--t-xs);
+    font-variant-numeric: tabular-nums;
+}
+.notice-category {
+    color: var(--accent);
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.notice-lead h3 {
+    margin: 0;
+    font-size: clamp(var(--t-xl), 2.4vw, var(--t-2xl));
+}
+.notice-lead-standfirst {
+    max-width: 48ch;
+    margin: 0;
+    color: var(--ink-500);
+    font-size: var(--t-md);
+    line-height: 1.55;
+}
+
+/* The record. Rules rather than cards: on the sunken field a row needs no
+   container, and the date column gives the eye something to scan down. */
+.notice-rows ol {
+    margin: 0;
+    padding: 0;
+    border-block: 1px solid var(--line-strong);
+    list-style: none;
+}
+.notice-rows li + li {
+    border-top: 1px solid var(--line);
+}
+.notice-row {
+    display: grid;
+    min-height: 76px;
+    grid-template-columns: 54px minmax(0, 1fr);
+    align-items: center;
+    gap: var(--s-4);
+    padding: var(--s-3) var(--s-3);
+}
+.notice-row-date {
+    color: var(--ink-400);
+    font-size: var(--t-xs);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.notice-row-copy {
+    display: grid;
+    min-width: 0;
+    gap: 3px;
+}
+.notice-row-copy strong {
+    color: var(--fg);
+    font-size: var(--t-base);
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+/* --- The city in figures ------------------------------------------------
+   The one dark field on the page, and the page's second photographic weight
+   after the banner. These are facts about Tanjay with the census year
+   attached, not counts of what this portal happens to hold: a reader who
+   checks the population against the PSA should find the same number.
+   ----------------------------------------------------------------------- */
+/* The institution's deep green, run diagonally so the dark band reads as one
+   lit field rather than as a flat slab. It keeps the green the bar gave up:
+   this band sits a screen below the issued banner artwork, which is green, and
+   a second orange field that far from the bar would read as decoration instead
+   of as the city. The seal sits in the corner as a watermark — the one place on
+   the page with room for it at a size where it reads as the city's mark. */
+.figures-band {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border-block: 1px solid var(--primary-700);
+    background:
+        radial-gradient(
+            ellipse 60% 80% at 100% 0%,
+            var(--field-glow),
+            transparent 70%
+        ),
+        linear-gradient(
+            120deg,
+            var(--primary-900) 0%,
+            var(--field-from) 45%,
+            var(--field-to) 100%
+        );
+    color: var(--on-dark-muted);
+}
+.figures-band::after {
+    position: absolute;
+    z-index: -1;
+    right: -9%;
+    bottom: -48%;
+    width: min(46vw, 560px);
+    aspect-ratio: 1;
+    background: url('/image/seal-512.webp') center / contain no-repeat;
+    content: '';
+    filter: grayscale(1) brightness(2);
+    opacity: 0.045;
+    pointer-events: none;
+}
+.figures-band-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 290px) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(var(--s-6), 5vw, var(--s-8));
+}
+.eyebrow--on-dark {
+    color: var(--gold-on-dark);
+}
+.figures-intro h2 {
+    margin-top: var(--s-3);
+    color: #fff;
+}
+.figures-intro p {
+    max-width: 42ch;
+    margin: var(--s-3) 0 0;
+    color: var(--on-dark-muted);
+    font-size: var(--t-base);
+    line-height: 1.6;
+}
+/* Ruled by borders on the cells rather than by the band showing through 1px
+   gaps: the band is a gradient now, and a cell filled to hide it would cut a
+   flat green block out of it. */
+.figures-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.figure-cell {
+    display: grid;
+    align-content: start;
+    gap: var(--s-1);
+    padding: var(--s-5) var(--s-5) var(--s-6);
+}
+.figure-cell:nth-child(even) {
+    border-left: 1px solid var(--on-dark-line);
+}
+.figure-cell:nth-child(n + 3) {
+    border-top: 1px solid var(--on-dark-line);
+}
+/* A gold stroke over each figure, the eyebrow's mark at figure scale. */
+.figure-cell::before {
+    width: 28px;
+    height: 2px;
+    margin-bottom: var(--s-3);
+    background: var(--gold-on-dark);
+    content: '';
+    transform-origin: left;
+    transition: transform var(--d-draw) var(--ease-out) 200ms;
+}
+/* The four strokes draw in turn, left to right and down, the order the
+   figures are read in. */
+.figures-list:not([data-shown]) .figure-cell::before {
+    transform: scaleX(0);
+}
+.figure-cell:nth-child(2)::before {
+    transition-delay: 300ms;
+}
+.figure-cell:nth-child(3)::before {
+    transition-delay: 400ms;
+}
+.figure-cell:nth-child(4)::before {
+    transition-delay: 500ms;
+}
+.figure-value {
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: clamp(var(--t-3xl), 4vw, var(--t-5xl));
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+}
+.figure-label {
+    margin-top: var(--s-2);
+    color: var(--on-dark);
+    font-size: var(--t-base);
+    font-weight: 650;
+}
+.figure-note {
+    color: var(--on-dark-muted);
+    font-size: var(--t-xs);
+}
+
+/* --- Transparency and public records ------------------------------------
+   Publishing the budget and the Citizen's Charter is a legal duty under the
+   Local Government Code and RA 11032, not a site feature, so each row cites
+   the instrument it answers to. What the city has not published yet is shown
+   as a stated gap on a sunken cell: a link that goes nowhere is worse than
+   an admission, because a resident spends their trip to City Hall on it.
+   ----------------------------------------------------------------------- */
+.transparency-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--line);
+    list-style: none;
+}
+.transparency-item {
+    background: var(--surface);
+}
+.transparency-inner {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s-2);
+    padding: var(--s-5);
+    transition: background-color var(--d-micro) var(--ease-out);
+}
+a.transparency-inner:hover {
+    background: color-mix(in srgb, var(--accent-soft) 55%, var(--surface));
+}
+a.transparency-inner:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: -3px;
+}
+/* The statute, set as a reference mark rather than as body text: it is what
+   makes the claim checkable, and a reader who does not need it can skip it. */
+.transparency-basis {
+    padding: 2px 7px;
+    border: 1px solid color-mix(in srgb, var(--accent-mark) 45%, transparent);
+    border-radius: var(--r-sm);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: var(--t-xs);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+.transparency-item strong {
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: var(--t-lg);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+.transparency-copy {
+    flex: 1;
+    color: var(--ink-500);
+    font-size: var(--t-base);
+    line-height: 1.5;
+}
+.transparency-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: var(--s-2);
+    color: var(--accent);
+    font-size: var(--t-sm);
+    font-weight: 650;
+}
+a.transparency-inner:hover .transparency-state {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+/* Paler than the band, not darker: on parchment a darker well reads as
+   soiled paper, and a stated gap should read as a blank yet to be filled. */
+.transparency-item--pending {
+    background: color-mix(in srgb, var(--surface) 60%, var(--band));
+}
+.transparency-item--pending .transparency-state {
+    color: var(--ink-500);
+    font-weight: 600;
+}
+
+/* --- Emergency hotlines -------------------------------------------------
+   Highest-consequence content on the site, so it is the one band that still
+   refuses to blend in. It earns that from a heavy red rule along its top and
+   red numbers on white, not from a pink wash: a tinted band reads as an
+   error message, and this is a directory a resident should trust on sight.
+   Numbers are tel: links, and each row is tappable.
+   ----------------------------------------------------------------------- */
+.hotline-band {
+    border-top: 4px solid var(--danger);
+    background: var(--wash);
+    color: var(--ink-600);
+}
+.hotline-band-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+    gap: var(--s-6);
+    padding-block: var(--s-7);
+}
+.hotline-intro h2 {
+    margin: var(--s-2) 0 var(--s-2);
+    color: var(--fg);
+    font-size: var(--t-2xl);
+}
+.hotline-intro p {
+    color: var(--ink-600);
+    font-size: var(--t-base);
+}
+.hotline-intro .demo-text {
+    margin-top: var(--s-3);
+}
+.hotline-list {
+    display: grid;
+    overflow: hidden;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    list-style: none;
+    background: var(--line);
+}
+.hotline-item {
+    background: var(--surface);
+}
+/* The 1px gaps are drawn by the list background showing through, so an odd
+   number of numbers would leave one cell as a bare rule. The last row spans
+   instead. */
+.hotline-item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+}
+.hotline-link {
+    display: flex;
+    min-height: 72px;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding: var(--s-3) var(--s-4);
+    transition: background-color var(--d-micro) var(--ease-out);
+}
+.hotline-link:hover {
+    background: var(--danger-50);
+}
+.hotline-copy {
+    display: grid;
+    min-width: 0;
+    gap: 1px;
+}
+.hotline-copy strong {
+    color: var(--fg);
+    font-size: var(--t-base);
+    font-weight: 600;
+}
+.hotline-copy small {
+    color: var(--ink-500);
+    font-size: var(--t-xs);
+}
+.hotline-number {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+    color: var(--danger);
+    font-family: var(--font-display);
+    font-size: var(--t-lg);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+.hotline-number svg {
+    transition: transform var(--d-micro) var(--ease-out);
+}
+.hotline-link:hover .hotline-number svg {
+    transform: rotate(-12deg);
+}
+
+/* --- Footer -------------------------------------------------------------
+   The page closes on the city's orange, the same field the bar opens it with,
+   so the site is bracketed by one colour with the content on paper between.
+   It used to close on the deep green, which made the one document read as two
+   institutions once the identity moved to orange.
+
+   The bar's ramp settles rather than travels: a tall block has a vertical
+   axis the 21:1 strip does not, so it opens at --ember-from and sinks to
+   --ember-to, and the darkest part of the page is the last thing on it. The
+   bloom stays under the seal end, as on the bar.
+
+   The gold cannot come with it — --gold-on-dark measures 3.84:1 on this field
+   and is barely a hue away from it besides — so the labels and the hover
+   strokes take --cream-on-ember, which is the bloom's own colour at full
+   strength and holds 5.3:1 at the lightest stop.
+   ----------------------------------------------------------------------- */
+.site-footer {
+    background:
+        radial-gradient(
+            ellipse 50% 90% at 0% 0%,
+            var(--ember-glow),
+            transparent 70%
+        ),
+        linear-gradient(
+            172deg,
+            var(--ember-from) 0%,
+            var(--ember-to) 60%,
+            var(--ember-to) 100%
+        );
+    color: var(--on-ember-muted);
+}
+.site-footer :focus-visible {
+    outline-color: var(--cream-on-ember);
+}
+/* The brand and address column, then one column per nav list: the sections of
+   this page, and the national government links. The wide first column is the
+   address block, which needs the measure the link lists do not. */
+.site-footer-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: var(--s-7);
+    padding-block: var(--s-8) var(--s-7);
+}
+.footer-brand {
+    display: grid;
+    align-content: start;
+    gap: var(--s-5);
+}
+.footer-brand-top {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+}
+.footer-brand-top .seal-slot {
+    color: var(--cream-on-ember);
+}
+.footer-brand-copy {
+    display: grid;
+    gap: 2px;
+    line-height: 1.25;
+}
+.footer-brand-copy strong {
+    color: var(--on-ember);
+    font-family: var(--font-display);
+    font-size: var(--t-xl);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+}
+.footer-brand-copy span {
+    color: var(--on-ember-muted);
+    font-size: var(--t-sm);
+}
+.footer-contact {
+    display: grid;
+    gap: var(--s-3);
+    font-size: var(--t-sm);
+    line-height: 1.5;
+}
+.footer-contact > div {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-3);
+}
+.footer-contact svg {
+    flex: none;
+    margin-top: 3px;
+    color: var(--cream-on-ember);
+}
+.footer-contact a {
+    color: var(--on-ember-link);
+}
+.footer-contact a:hover {
+    color: var(--on-ember);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.site-footer-main nav {
+    display: grid;
+    align-content: start;
+    gap: var(--s-2) var(--s-5);
+    font-size: var(--t-base);
+}
+/* The page's own sections run to nine, so they set in two columns rather
+   than as one list twice the height of the column beside it. */
+.footer-sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.site-footer-main nav strong {
+    grid-column: 1 / -1;
+    margin-bottom: var(--s-2);
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--on-ember-line);
+    color: var(--cream-on-ember);
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.site-footer-main nav a,
+.site-footer-main nav span {
+    color: var(--on-ember-link);
+    transition: color var(--d-micro) var(--ease-out);
+}
+/* A gold stroke slides in under the link from the left rather than an
+   underline switching on: the footer is a list of destinations, and the
+   stroke moving the way the eye reads points at the one under the cursor. */
+.site-footer-main nav a {
+    position: relative;
+    justify-self: start;
+}
+.site-footer-main nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: -3px;
+    left: 0;
+    height: 1px;
+    background: var(--cream-on-ember);
+    content: '';
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-enter) var(--ease-out);
+}
+.site-footer-main nav a:hover {
+    color: var(--on-ember);
+}
+.site-footer-main nav a:hover::after,
+.site-footer-main nav a:focus-visible::after {
+    transform: scaleX(1);
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--on-ember-line);
+    color: var(--on-ember-muted);
+    font-size: var(--t-xs);
+}
+.footer-bottom-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-2) var(--s-5);
+    padding-block: var(--s-4);
+}
+.footer-bottom-inner p {
+    margin: 0;
+}
+
+/* --- How do I… guides ---------------------------------------------------
+   The intro beside one column of disclosures. Closed, each is a title and one
+   line of what it covers, so the list scans as a set of tasks; open, the whole
+   answer — steps, what to bring, and the three facts a resident needs before
+   leaving the house: which office, what it costs, how long it takes.
+
+   Open is marked three ways — the border takes the accent, the card lifts,
+   the caret turns — so the state never rests on one cue.
+   ----------------------------------------------------------------------- */
+.guides-inner {
+    display: grid;
+    align-items: start;
+    gap: var(--s-5) var(--s-7);
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
+}
+/* Sticky, so the heading stays beside a long open guide instead of
+   scrolling away from the list it introduces. */
+.guides-intro {
+    position: sticky;
+    top: calc(var(--header-h) + var(--s-5));
+    margin-bottom: 0;
+}
+/* A sidebar heading: one narrow column, so the broadsheet split and its
+   rule give way to the plain stack. */
+.guides-intro > div {
+    grid-template-columns: minmax(0, 1fr);
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+/* No hairline here for the section's colour to run along. */
+.guides-intro > div::after {
+    content: none;
+}
+.guides-intro > div > p:not(.eyebrow) {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: start;
+}
+.guide-list {
+    display: grid;
+    gap: var(--s-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.guide {
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    transition:
+        border-color var(--d-micro) var(--ease-out),
+        box-shadow var(--d-micro) var(--ease-out);
+}
+.guide:hover {
+    border-color: color-mix(in srgb, var(--accent-mark) 50%, var(--line));
+}
+.guide[open] {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-raised);
+}
+.guide-summary {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-4);
+    padding: var(--s-4) var(--s-5);
+    border-radius: var(--r-lg);
+    cursor: pointer;
+    list-style: none;
+}
+.guide-summary::-webkit-details-marker {
+    display: none;
+}
+.guide-summary-copy {
+    display: grid;
+    min-width: 0;
+    flex: 1;
+    gap: 4px;
+}
+.guide-summary-copy strong {
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: var(--t-lg);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    transition: color var(--d-micro) var(--ease-out);
+}
+.guide-summary-copy span {
+    color: var(--ink-500);
+    font-size: var(--t-sm);
+    line-height: 1.5;
+}
+.guide-summary:hover .guide-summary-copy strong {
+    color: var(--accent);
+}
+.guide-caret {
+    flex: none;
+    margin-top: 3px;
+    color: var(--ink-400);
+    transition: transform var(--d-micro) var(--ease-out);
+}
+.guide[open] .guide-caret {
+    color: var(--accent);
+    transform: rotate(180deg);
+}
+/* Steps and what to bring side by side, the facts as a full-width strip
+   beneath them: the strip is the summary a reader checks last, on the way
+   out of the door. */
+.guide-body {
+    display: grid;
+    gap: var(--s-4) var(--s-6);
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    margin: 0 var(--s-5);
+    padding: var(--s-4) 0 var(--s-5);
+    border-top: 1px solid var(--line);
+}
+/* Opening, the answer slides down out of its title rather than appearing
+   in one frame — transform and opacity only, so the card's height still
+   changes instantly and nothing below it is animated through a reflow.
+   Closing needs no counterpart: the native element removes the body at
+   once, which is the expected behaviour of a disclosure. */
+.guide[open] .guide-body {
+    animation: guide-open var(--d-enter) var(--ease-out);
+}
+@keyframes guide-open {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+}
+.guide-label {
+    margin: 0 0 var(--s-2);
+    color: var(--ink-500);
+    font-family: inherit;
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+/* The list style is restated because the base reset strips it from every
+   list — without it the steps lose their numbers, which are the point. */
+.guide-steps,
+.guide-requirements {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding-left: 1.25em;
+    color: var(--ink-700);
+    font-size: var(--t-base);
+    line-height: 1.5;
+}
+.guide-steps {
+    list-style: decimal;
+}
+.guide-requirements {
+    list-style: disc;
+}
+.guide-steps li::marker {
+    color: var(--accent);
+    font-weight: 700;
+}
+.guide-requirements li::marker {
+    color: var(--accent-mark);
+}
+.guide-facts {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: var(--s-3);
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    margin: 0;
+    padding: var(--s-3) var(--s-4);
+    border-radius: var(--r-md);
+    background: color-mix(in srgb, var(--accent-soft) 50%, var(--surface));
+}
+.guide-facts dt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-500);
+    font-size: var(--t-xs);
+    font-weight: 600;
+}
+.guide-facts dd {
+    margin: 2px 0 0;
+    color: var(--fg);
+    font-size: var(--t-sm);
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+/* --- Report a concern ---------------------------------------------------
+   The intro on the left, the two channels on the right. The national line is
+   the one dark panel in the pair, with its number set at display size: 8888
+   is the whole instruction, and a resident should be able to read it from
+   across a room.
+   ----------------------------------------------------------------------- */
+.report-inner {
+    display: grid;
+    align-items: start;
+    gap: var(--s-6) var(--s-7);
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.5fr);
+}
+.report-intro h2 {
+    margin: var(--s-2) 0 var(--s-3);
+}
+.report-intro p:not(.eyebrow) {
+    max-width: 44ch;
+    margin: 0;
+    color: var(--ink-600);
+    font-size: var(--t-md);
+    line-height: 1.6;
+}
+.report-channels {
+    display: grid;
+    gap: var(--s-4);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.report-channel {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    gap: var(--s-2);
+    padding: var(--s-5);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+}
+.report-channel h3 {
+    margin: 0;
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: var(--t-lg);
+    font-weight: 600;
+}
+.report-channel p {
+    margin: 0;
+    color: var(--ink-600);
+    font-size: var(--t-sm);
+    line-height: 1.55;
+}
+.report-channel-icon {
+    color: var(--primary);
+}
+.report-actions {
+    display: grid;
+    gap: 2px;
+    margin: auto 0 0;
+    padding: var(--s-2) 0 0;
+    list-style: none;
+}
+.report-actions a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: var(--s-2);
+    color: var(--primary);
+    font-weight: 650;
+    overflow-wrap: anywhere;
+}
+.report-actions a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.report-channel--national {
+    border-color: var(--primary-900);
+    background: var(--primary-900);
+}
+.report-channel--national h3 {
+    color: var(--on-dark);
+}
+.report-channel--national p {
+    color: var(--on-dark-muted);
+}
+/* --gold-on-dark: 7.9:1 on --primary-900, so it carries both the number and
+   the link. The focus ring follows it — the site's gold is for white paper. */
+.report-channel--national .report-actions a {
+    color: var(--gold-on-dark);
+}
+.report-channel--national :focus-visible {
+    outline-color: var(--gold-on-dark);
+}
+.report-channel-number {
+    color: var(--gold-on-dark);
+    font-family: var(--font-display);
+    font-size: var(--t-4xl);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+/* --- Official portraits -------------------------------------------------
+   One object at three sizes. Without a photograph it is the initials on the
+   city green in the plate's gold, the same pairing as the seal, so a row of
+   them reads as a set rather than as missing images. The size classes set
+   the font size; the initials and the figure scale from it.
+   ----------------------------------------------------------------------- */
+.official-portrait {
+    display: grid;
+    overflow: hidden;
+    flex: none;
+    place-items: center;
+}
+.official-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.official-portrait--blank {
+    background: linear-gradient(
+        160deg,
+        var(--portrait-from) 0%,
+        var(--portrait-to) 100%
+    );
+    color: var(--gold-on-dark);
+}
+.official-portrait-initials {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+.official-portrait-figure {
+    width: 1.6em;
+    height: 1.6em;
+    color: var(--on-dark-muted);
+    stroke-width: 1.5;
+}
+
+/* --- From the Mayor's Desk ----------------------------------------------
+   The portrait beside the letter, the agenda beneath it across the full
+   width. The message is set in the display face at a size between body and
+   heading, so it reads as somebody speaking rather than as more page copy;
+   the agenda is a ruled table of numbered points, its gold numerals the one
+   large thing in it.
+   ----------------------------------------------------------------------- */
+.mayor-letter {
+    display: grid;
+    align-items: start;
+    gap: var(--s-7);
+    grid-template-columns: 220px minmax(0, 1fr);
+}
+/* Framed like an official portrait on a wall: a gold hairline set off the
+   picture by a white mat. It is the one framed object on the page, which is
+   the point — the Mayor's is the one signed voice on it.
+
+   The frame is drawn outside the picture (7px mat plus the 1px rule), so the
+   picture is inset by the same --s-2. That puts the frame's outer edge on the
+   column line, where the rest of the page aligns; without it the frame hung
+   8px into the gutter and nearly touched the screen edge on a phone. */
+.mayor-portrait {
+    width: calc(100% - 2 * var(--s-2));
+    margin: var(--s-2);
+    aspect-ratio: 5 / 6;
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-raised);
+    font-size: var(--t-5xl);
+    outline: 1px solid var(--accent-mark);
+    outline-offset: 7px;
+}
+.mayor-letter-body h2 {
+    margin: var(--s-2) 0 var(--s-5);
+}
+.mayor-quote {
+    margin: 0;
+}
+.mayor-quote blockquote {
+    position: relative;
+    margin: 0;
+}
+/* Hung in the margin, so the first line starts flush with the heading above
+   it and the mark sits outside the text instead of crowding it. */
+.mayor-quote blockquote::before {
+    position: absolute;
+    top: -0.12em;
+    left: -0.55em;
+    color: var(--accent-mark);
+    content: '\201C';
+    font-family: var(--font-display);
+    font-size: var(--t-5xl);
+    font-weight: 700;
+    line-height: 1;
+}
+.mayor-quote blockquote p {
+    max-width: 48ch;
+    margin: 0;
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: var(--t-2xl);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.42;
+    text-wrap: pretty;
+}
+/* The signature hangs off a short gold stroke, the same mark the eyebrows
+   open with, so the attribution reads as part of the page's furniture. */
+.mayor-signature {
+    display: grid;
+    gap: 2px;
+    margin-top: var(--s-5);
+}
+.mayor-signature::before {
+    width: 32px;
+    height: 2px;
+    margin-bottom: var(--s-3);
+    background: var(--accent-mark);
+    content: '';
+    transform-origin: left;
+    transition: transform var(--d-draw) var(--ease-out) 420ms;
+}
+/* The letter arrives in reading order: the quotation mark settles beside
+   the first line, and the stroke over the signature is drawn last, as if
+   underlining the name. */
+.mayor-quote blockquote::before {
+    transition:
+        opacity var(--d-enter) var(--ease-out) 160ms,
+        transform var(--d-enter) var(--ease-out) 160ms;
+}
+.mayor-letter:not([data-shown]) .mayor-quote blockquote::before {
+    opacity: 0;
+    transform: translateY(10px);
+}
+.mayor-letter:not([data-shown]) .mayor-signature::before {
+    transform: scaleX(0);
+}
+.mayor-signature strong {
+    color: var(--fg);
+    font-size: var(--t-md);
+    font-weight: 700;
+}
+.mayor-signature span {
+    color: var(--ink-500);
+    font-size: var(--t-sm);
+}
+.mayor-agenda {
+    margin-top: var(--s-8);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--line);
+}
+.mayor-agenda--alone {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+}
+.mayor-agenda-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-4);
+    margin-bottom: var(--s-4);
+}
+.mayor-agenda-heading h3 {
+    margin: 0;
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: var(--t-2xl);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+.mayor-agenda-heading p {
+    margin: 0;
+    color: var(--ink-500);
+    font-size: var(--t-sm);
+}
+.agenda-list {
+    display: grid;
+    gap: 0 var(--s-6);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.agenda-point {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--s-2);
+    padding: var(--s-4) 0 var(--s-5);
+    border-top: 1px solid var(--line-strong);
+}
+/* --gold, not --gold-bright: 5.3:1 on white, so the numerals hold up at any
+   size the layout gives them. */
+.agenda-point::before {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 44px;
+    height: 2px;
+    background: var(--accent-mark);
+    content: '';
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-draw) var(--ease-out) 140ms;
+}
+.agenda-point[data-shown]::before {
+    transform: scaleX(1);
+}
+.agenda-number {
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: var(--t-3xl);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+.agenda-copy {
+    display: grid;
+    gap: 4px;
+}
+.agenda-copy strong {
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: var(--t-lg);
+    font-weight: 600;
+    line-height: 1.3;
+}
+.agenda-copy span {
+    color: var(--ink-500);
+    font-size: var(--t-sm);
+    line-height: 1.5;
+}
+
+/* --- Your public servants -----------------------------------------------
+   The two principals as wide cards, then the council as a grid of smaller
+   ones. Hierarchy by size alone: the council cards are the same object at a
+   smaller scale, not a different design.
+   ----------------------------------------------------------------------- */
+.servant-principals {
+    display: grid;
+    gap: var(--s-4);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0 0 var(--s-7);
+    padding: 0;
+    list-style: none;
+}
+.servant-principal {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    gap: var(--s-5);
+    padding: var(--s-5);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+}
+/* The council is a ruled directory, not a wall of boxes: twelve bordered
+   cards in a grid read as a template, and the rules keep the two principal
+   cards the only framed objects in the section. */
+.servant-card {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-3);
+    padding: var(--s-4) 0;
+    border-top: 1px solid var(--line-strong);
+}
+/* The section's colour arrives with each seat: a rule down the edge of the
+   two principal cards, and a short stroke over each councillor's rule. */
+.servant-principal::before,
+.servant-card::before {
+    position: absolute;
+    background: var(--accent-mark);
+    content: '';
+    transition: transform var(--d-draw) var(--ease-out) 160ms;
+}
+.servant-principal::before {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+.servant-card::before {
+    top: -1px;
+    left: 0;
+    width: 36px;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+}
+.servant-principal[data-shown]::before {
+    transform: scaleY(1);
+}
+.servant-card[data-shown]::before {
+    transform: scaleX(1);
+}
+.servant-portrait--principal {
+    width: 88px;
+    height: 88px;
+    border-radius: var(--r-full);
+    font-size: var(--t-2xl);
+}
+.servant-portrait {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--r-full);
+    font-size: var(--t-md);
+}
+.servant-copy {
+    display: grid;
+    min-width: 0;
+    gap: 2px;
+}
+.servant-branch {
+    margin-bottom: 2px;
+    color: var(--gold);
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.servant-position {
+    color: var(--ink-600);
+    font-size: var(--t-sm);
+    font-weight: 600;
+}
+.servant-name {
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: var(--t-lg);
+    font-weight: 600;
+    line-height: 1.3;
+}
+.servant-principal .servant-name {
+    font-size: var(--t-xl);
+}
+/* An unconfirmed seat: the same line, at body weight and in the meta grey,
+   so it reads as a note about the seat rather than as somebody's name. */
+.servant-name.is-pending {
+    color: var(--ink-500);
+    font-family: var(--font-sans);
+    font-size: var(--t-base);
+    font-weight: 500;
+}
+.servant-principal .servant-name.is-pending {
+    font-size: var(--t-md);
+}
+.servant-committee {
+    margin-top: 4px;
+    color: var(--ink-500);
+    font-size: var(--t-xs);
+    line-height: 1.45;
+}
+.servant-council-title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-3);
+    margin: 0 0 var(--s-4);
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: var(--t-xl);
+    font-weight: 600;
+}
+.servant-council-title span {
+    color: var(--ink-500);
+    font-family: var(--font-sans);
+    font-size: var(--t-sm);
+    font-weight: 500;
+}
+.servant-grid {
+    display: grid;
+    gap: 0 var(--s-6);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* --- Notices beside events ----------------------------------------------
+   With events to show, the notices take the wider column and stack their
+   lead above the record, and the events take a narrower one beside them.
+   Without events the wrapper is an ordinary block and the notices keep the
+   side-by-side layout they have on their own.
+   ----------------------------------------------------------------------- */
+.news--with-events {
+    display: grid;
+    align-items: start;
+    gap: clamp(var(--s-5), 4vw, var(--s-7));
+    grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
+}
+.news--with-events .notice-lead-grid {
+    gap: var(--s-5);
+    grid-template-columns: minmax(0, 1fr);
+}
+
+/* --- What's on ----------------------------------------------------------
+   A white panel on the sunken field, like the lead notice beside it. The
+   date block is the scanning column: day large in the city green, month
+   small in gold, in a fixed-width tile so the titles all start on one line.
+   ----------------------------------------------------------------------- */
+.events {
+    padding: var(--s-5);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+}
+.events-title {
+    margin: 0 0 var(--s-2);
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: var(--t-xl);
+    font-weight: 600;
+}
+.event-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.event {
+    display: grid;
+    align-items: start;
+    gap: var(--s-4);
+    grid-template-columns: 52px minmax(0, 1fr);
+    padding: var(--s-4) 0;
+}
+.event + .event {
+    border-top: 1px solid var(--line);
+}
+.event:last-child {
+    padding-bottom: 0;
+}
+.event-date {
+    display: grid;
+    height: 56px;
+    align-content: center;
+    justify-items: center;
+    gap: 2px;
+    border: 1px solid color-mix(in srgb, var(--accent-mark) 40%, transparent);
+    border-radius: var(--r-md);
+    background: var(--band);
+    transition:
+        opacity var(--d-enter) var(--ease-out),
+        transform var(--d-enter) var(--ease-out);
+}
+/* The tiles settle in one after another once the panel arrives, so the
+   column reads as a sequence of dates before a single title is read. */
+.events:not([data-shown]) .event-date {
+    opacity: 0;
+    transform: scale(0.82);
+}
+.event:nth-child(2) .event-date {
+    transition-delay: 70ms;
+}
+.event:nth-child(3) .event-date {
+    transition-delay: 140ms;
+}
+.event:nth-child(n + 4) .event-date {
+    transition-delay: 210ms;
+}
+.event-day {
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: var(--t-2xl);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    line-height: 1;
+}
+.event-month {
+    color: var(--gold);
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.event-copy {
+    display: grid;
+    min-width: 0;
+    gap: 3px;
+}
+.event-copy strong {
+    color: var(--fg);
+    font-size: var(--t-base);
+    font-weight: 650;
+    line-height: 1.4;
+}
+.event-when {
+    color: var(--ink-600);
+    font-size: var(--t-sm);
+    font-variant-numeric: tabular-nums;
+}
+.event-venue {
+    display: flex;
+    align-items: center;
+    gap: var(--s-1);
+    color: var(--ink-500);
+    font-size: var(--t-xs);
+}
+.event-venue svg {
+    flex: none;
+}
+.event-description {
+    display: -webkit-box;
+    overflow: hidden;
+    margin-top: 2px;
+    -webkit-box-orient: vertical;
+    color: var(--ink-500);
+    font-size: var(--t-xs);
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    line-height: 1.45;
+}
+
+/* --- City programmes ----------------------------------------------------
+   The audience heads each card in a tinted band, because that is what a
+   reader is scanning the row for. The office and how to apply sit at the
+   foot of every card at the same height, below a hairline, so they can be
+   compared across the row however long each summary runs.
+   ----------------------------------------------------------------------- */
+.program-list {
+    display: grid;
+    gap: var(--s-4);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.program {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+}
+.program-audience {
+    margin: 0;
+    padding: var(--s-3) var(--s-5);
+    /* Half strength: the full -100 across six card heads turned the row
+       salmon. */
+    background: color-mix(in srgb, var(--accent-soft) 50%, var(--surface));
+    color: var(--accent);
+    font-size: var(--t-sm);
+    font-weight: 700;
+}
+/* --ink-600, not the meta grey: --ink-500 falls to 4.4:1 on the clay. */
+.program-audience span {
+    color: var(--ink-600);
+    font-weight: 500;
+}
+/* The section's stroke draws across the head of each card as it arrives. */
+.program::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 3px;
+    background: var(--accent-mark);
+    content: '';
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-draw) var(--ease-out) 180ms;
+}
+.program[data-shown]::before {
+    transform: scaleX(1);
+}
+.program-body {
+    display: grid;
+    gap: var(--s-2);
+    padding: var(--s-5) var(--s-5) var(--s-4);
+}
+.program-body h3 {
+    margin: 0;
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: var(--t-lg);
+    font-weight: 600;
+    line-height: 1.3;
+}
+.program-body p {
+    margin: 0;
+    color: var(--ink-600);
+    font-size: var(--t-sm);
+    line-height: 1.55;
+}
+.program-facts {
+    display: grid;
+    gap: var(--s-3);
+    margin: auto var(--s-5) 0;
+    padding: var(--s-4) 0 var(--s-5);
+    border-top: 1px solid var(--line);
+}
+.program-facts dt {
+    color: var(--ink-500);
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+/* Medium, not semibold: "how to apply" is a sentence, and a sentence set
+   heavy at the foot of six cards makes the row bottom-heavy. */
+.program-facts dd {
+    margin: 2px 0 0;
+    color: var(--fg);
+    font-size: var(--t-sm);
+    font-weight: 500;
+    line-height: 1.45;
+}
+
+/* --- Awards and recognitions --------------------------------------------
+   A strip under the transparency records, set apart by a strong rule. Each
+   badge is a gold-ringed disc — the award's own artwork when the office has
+   it — with the year, the title and the conferring body beside it.
+   ----------------------------------------------------------------------- */
+.recognitions {
+    margin-top: var(--s-7);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--line-strong);
+}
+.recognitions-title {
+    margin: 0 0 var(--s-4);
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-size: var(--t-xl);
+    font-weight: 600;
+}
+.recognition-list {
+    display: grid;
+    gap: var(--s-4) var(--s-5);
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.recognition {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-3);
+}
+.recognition-badge {
+    display: grid;
+    overflow: hidden;
+    width: 48px;
+    height: 48px;
+    flex: none;
+    place-items: center;
+    border: 1px solid var(--gold-bright);
+    border-radius: var(--r-full);
+    background: var(--gold-50);
+    color: var(--gold);
+}
+.recognition-badge svg {
+    width: 22px;
+    height: 22px;
+}
+.recognition-badge img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.recognition-copy {
+    display: grid;
+    min-width: 0;
+    gap: 2px;
+}
+.recognition-year {
+    color: var(--gold);
+    font-size: var(--t-xs);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+}
+.recognition-copy strong {
+    color: var(--fg);
+    font-size: var(--t-sm);
+    font-weight: 650;
+    line-height: 1.35;
+}
+.recognition-copy > span:last-child {
+    color: var(--ink-500);
+    font-size: var(--t-xs);
+}
+
+/* --- Collapsed menu -----------------------------------------------------
+   The lockup, the row of section names and the search field stop fitting on
+   one line well before the rest of the page needs rearranging, so the menu
+   collapses on its own breakpoint rather than waiting for the layout one
+   below.
+
+   1240px, up from the 1180 the row was measured at without a field. Measured
+   at 1241: the lockup is 269px, the six headings with their carets 557px and
+   the field 276px, which with two gaps leaves 43px of the 1193px row — enough
+   that the row is not sitting on its own limit, and the usual 1280px laptop
+   keeps the full menu rather than being handed a hamburger.
+
+   Below here the bar is the lockup, the field, and the two toggles. The field
+   stays on the bar rather than moving into the menu panel: search is how a
+   resident who knows what they want avoids the menu, and burying it inside the
+   menu takes that away at exactly the width where it matters most.
+   ----------------------------------------------------------------------- */
+@media (max-width: 1240px) {
+    .menu-toggle {
+        display: grid;
+        align-self: center;
+    }
+    /* The nav is out of flow at this width, so the field is what carries the
+       right-hand end of the row and the toggle follows it on the gap. */
+    .site-search {
+        margin-left: auto;
+    }
+    /* The row of ruled cells only works across a wide bar. Collapsed into a
+       panel, the entries go back to stacked rows and the moving rule gives way
+       to a left mark, which is what reads at this size. */
+    .primary-nav {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        display: none;
+        max-height: calc(100vh - var(--header-h));
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 2px;
+        overflow-y: auto;
+        padding: var(--s-3) var(--s-4) var(--s-5);
+        border-bottom: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow-overlay);
+    }
+    .primary-nav.is-open {
+        display: flex;
+    }
+    .nav-item {
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        justify-content: space-between;
+        padding-inline: var(--s-3);
+        border-radius: var(--r-md);
+        font-size: var(--t-md);
+    }
+    .nav-item::after {
+        display: none;
+    }
+    /* The cells are styled for the bar's dark field, and here they are in a
+       white panel hanging below it — so every light-on-dark value has to come
+       back to ink or the panel is blank paper. The toggle and the lockup are
+       the only header controls that stay on the bar at this width, and they
+       keep their light treatment. */
+    .nav-item {
+        color: var(--ink-700);
+    }
+    .nav-item::after {
+        display: none;
+    }
+    .nav-item:hover {
+        background: var(--wash);
+        color: var(--primary-700);
+    }
+    .nav-item:active {
+        background: var(--sunken);
+    }
+    /* The mark goes back to the accent: gold was for carrying the state on
+       green without failing contrast, and on white --primary is both legible
+       and the accent the rest of the panel already uses. */
+    .primary-nav > a.is-active {
+        background: var(--primary-50);
+        color: var(--primary);
+    }
+    .primary-nav > a.is-active::before {
+        inset: var(--s-2) auto var(--s-2) 0;
+        width: 3px;
+        height: auto;
+        background: var(--primary);
+    }
+    /* base.css gives everything inside the bar the flag's yellow focus ring,
+       which is right for the controls that stay on the green. The panel is a
+       descendant of the bar but is white, and yellow on white is 1.5:1 — so
+       the gold ring comes back for everything inside it. */
+    .primary-nav :focus-visible {
+        outline-color: var(--focus);
+    }
+
+    /* In the panel a group is an accordion: the heading is a full-width row
+       with its caret at the far end, and the entries open in place beneath it
+       rather than as a sheet over a sheet. */
+    .nav-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    .nav-caret {
+        color: var(--ink-500);
+    }
+    .nav-group.is-open > .nav-item {
+        background: transparent;
+        color: var(--primary);
+    }
+    .nav-group.is-open .nav-caret {
+        color: var(--primary);
+    }
+    /* Indented on a hairline, so the entries read as belonging to the heading
+       above them and not as more headings. The sheet's own surface, border and
+       shadow go: the panel already is the surface. */
+    .nav-panel,
+    .nav-group:last-child > .nav-panel {
+        position: static;
+        width: auto;
+        margin: 0 0 var(--s-2) var(--s-3);
+        padding: 0 0 0 var(--s-2);
+        border: 0;
+        border-left: 2px solid var(--line);
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .nav-panel-link {
+        min-height: 44px;
+    }
+    /* No room to the side in a phone-width panel, so the submenu opens in
+       place, one more step in on the same hairline, and its caret turns
+       down to say so. */
+    .nav-sub-list {
+        position: static;
+        width: auto;
+        margin: 0 0 0 var(--s-3);
+        padding: 0 0 0 var(--s-2);
+        border: 0;
+        border-left: 2px solid var(--line);
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .nav-sub.is-open .nav-sub-caret {
+        transform: rotate(90deg);
+    }
+}
+
+@media (max-width: 1000px) {
+    /* The clock starts shedding parts rather than vanishing: a resident on a
+       phone is the one most likely to be checking whether an office is still
+       open, and the date is the part they already know. */
+    .pst-date {
+        display: none;
+    }
+    /* Below this the feature's cover and its copy share about 560px while the
+       shelf's titles are down to 240px and clipping at two lines. The band
+       stacks instead, and the shelf takes the full width as two columns — it
+       is four rows, and in one column under the feature it would run the band
+       further down the page than the thing it belongs to. */
+    .city-updates-inner {
+        gap: var(--s-5);
+        grid-template-areas:
+            'head'
+            'panel'
+            'shelf';
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .city-update-shelf {
+        gap: var(--s-2);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .service-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    /* Below this the lead's standfirst and the dated rows are both squeezed
+       into about 300px each, so the record moves under the lead. */
+    .notice-lead-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .figures-band-inner {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--s-6);
+    }
+    .site-footer-main {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .footer-brand {
+        grid-column: 1 / -1;
+    }
+    .hotline-band-inner {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--s-5);
+    }
+    .report-inner,
+    .guides-inner {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .guides-intro {
+        position: static;
+    }
+    .mayor-letter {
+        gap: var(--s-6);
+        grid-template-columns: 168px minmax(0, 1fr);
+    }
+    .mayor-portrait {
+        font-size: var(--t-4xl);
+    }
+    .agenda-list,
+    .servant-grid,
+    .program-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    /* The events move under the notices: beside them they would be about
+       280px wide here, and every title would wrap to three lines. */
+    .news--with-events {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Both strips of small print now compete for one line, so the strip gives up
+   its remaining optional parts in order: the clock's label, then the links
+   that the collapsed menu panel already carries at a tappable size. */
+@media (max-width: 860px) {
+    .pst-label {
+        display: none;
+    }
+}
+
+@media (max-width: 760px) {
+    .identity-link {
+        display: none;
+    }
+    .pst-clock {
+        padding-right: 0;
+        border-right: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .site-brand-copy strong {
+        font-size: var(--t-base);
+    }
+    /* The province goes and the national line stays. At 14px the city name is
+       narrower than "Republic of the Philippines" tracked out, so the kicker
+       would set the lockup's width and the rule would overhang the name it
+       divides; pulling the tracking in keeps the rule tied to the name. */
+    .site-brand-province {
+        display: none;
+    }
+    .site-brand-republic {
+        letter-spacing: 0.04em;
+    }
+
+    /* The field has run out of bar. A 44px control opens it instead, and what
+       it opens is the sheet: the field at the top of it and the results under
+       the field, which is the same object the wide layout shows in two
+       pieces. */
+    .search-toggle {
+        display: grid;
+        align-self: center;
+    }
+    /* Static, so the sheet resolves against the bar and runs its full width
+       rather than hanging off the edge of a 44px button. */
+    .site-search {
+        position: static;
+        margin-left: auto;
+    }
+    .search-sheet {
+        position: absolute;
+        z-index: 50;
+        top: 100%;
+        right: 0;
+        left: 0;
+        display: none;
+        max-height: calc(100vh - var(--header-h));
+        overflow-y: auto;
+        padding: var(--s-3) var(--s-4) var(--s-4);
+        border-bottom: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow-overlay);
+    }
+    .site-search.is-expanded .search-sheet {
+        display: block;
+    }
+    /* Everything inside the sheet comes back to ink, the same inversion the
+       collapsed menu makes: the field was styled for the bar's dark field and
+       is now on white paper, where a white-on-white hairline is nothing at
+       all. 44px tall here rather than 40 — it is a tap target now, not a
+       pointer target. */
+    .search-field {
+        width: 100%;
+        height: 44px;
+        border-color: var(--line-strong);
+        background: var(--wash);
+        color: var(--fg);
+    }
+    .search-field:hover {
+        background: var(--sunken);
+    }
+    .search-field:focus-within {
+        border-color: var(--primary);
+        background: var(--surface);
+        outline-color: var(--focus);
+    }
+    .search-field-icon,
+    .search-clear {
+        color: var(--ink-500);
+    }
+    .search-clear:hover {
+        background: var(--sunken);
+        color: var(--fg);
+    }
+    .search-input {
+        color: var(--fg);
+        font-size: var(--t-md); /* 16px, or iOS zooms the page on focus */
+    }
+    .search-input::placeholder {
+        color: var(--ink-500);
+    }
+    /* No shortcut to advertise without a keyboard to press it on. */
+    .search-hint {
+        display: none;
+    }
+    /* The results are inside the sheet now, so they stop being a panel of
+       their own: the sheet carries the surface, the border and the scroll. */
+    .search-panel {
+        position: static;
+        width: auto;
+        max-height: none;
+        overflow: visible;
+        padding: var(--s-2) 0 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+    .site-brand .seal-slot {
+        width: 40px;
+        height: 40px;
+    }
+    .site-brand .seal-slot svg {
+        width: 21px;
+        height: 21px;
+    }
+    /* Tucked a step further into the corner: the banner is around 300px tall
+       here, and 16px of inset is a larger share of that than of the desktop
+       banner. */
+    .hero-pause {
+        right: var(--s-3);
+        bottom: var(--s-3);
+    }
+    .service-grid,
+    .figures-list,
+    .transparency-list,
+    .hotline-list,
+    .guide-list,
+    .report-channels,
+    .servant-principals,
+    .servant-grid,
+    .program-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .events {
+        padding: var(--s-4);
+    }
+    .guide-summary {
+        padding: var(--s-4);
+    }
+    .guide-body {
+        grid-template-columns: minmax(0, 1fr);
+        margin-inline: var(--s-4);
+    }
+    /* The portrait moves above the letter at a size that leaves the message
+       the screen, and the message steps down one size so a two-paragraph
+       letter is not four screens of display type. */
+    .mayor-letter {
+        gap: var(--s-5);
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .mayor-portrait {
+        width: 112px;
+        margin-bottom: 0;
+        font-size: var(--t-3xl);
+    }
+    .mayor-quote blockquote p {
+        font-size: var(--t-xl);
+    }
+    /* Back into the flow: hung in the margin it would sit in the 16px page
+       gutter, or past it. */
+    .mayor-quote blockquote::before {
+        position: static;
+        display: block;
+        height: 0.5em;
+    }
+    .mayor-agenda-heading {
+        flex-direction: column;
+        gap: var(--s-1);
+    }
+    /* One column, with the numeral in a gutter of its own beside the point:
+       a numeral stacked over every title would double the list's length. */
+    .agenda-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .agenda-point {
+        grid-template-columns: 48px minmax(0, 1fr);
+        gap: var(--s-3);
+    }
+    .agenda-number {
+        font-size: var(--t-2xl);
+    }
+    .servant-principal {
+        gap: var(--s-4);
+        padding: var(--s-4);
+    }
+    .servant-portrait--principal {
+        width: 72px;
+        height: 72px;
+    }
+    /* A figure is the one thing on the page that may keep its display size on
+       a phone — it is four characters wide and it is the point of the band —
+       but the cells tighten so four of them are still one scroll. */
+    .figure-cell {
+        padding: var(--s-4) var(--s-4) var(--s-5);
+    }
+    /* One column: the side rule goes and every cell after the first takes
+       the top one. */
+    .figure-cell:nth-child(even) {
+        border-left: 0;
+    }
+    .figure-cell + .figure-cell {
+        border-top: 1px solid var(--on-dark-line);
+    }
+    .site-footer-main {
+        gap: var(--s-6);
+        grid-template-columns: minmax(0, 1fr);
+        padding-block: var(--s-7) var(--s-6);
+    }
+    .notice-row {
+        min-height: 68px;
+        grid-template-columns: 48px minmax(0, 1fr);
+        padding-inline: var(--s-2);
+    }
+    .notice-row:has(.notice-row-poster) {
+        grid-template-columns: 48px minmax(0, 1fr) 88px;
+    }
+    .footer-bottom-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* --- Stacked banner -----------------------------------------------------
+   Down to 541px the banner keeps the wide composition — photograph beneath,
+   plate over its left — and is 240px tall at its narrowest, which still holds
+   the portrait at a readable size. It used to unstack at 1000px, and that cost
+   more than it bought: the plate sat in a row of its own with the transparent
+   half of the artwork showing nothing but the page's grey, a blank panel
+   beside the Mayor about as wide as the portrait itself, and the banner grew
+   to twice its height on a tablet to hold the photograph underneath.
+
+   Below 541px the layers do unstack, because the wide composition would make
+   the portrait a thumbnail. The plate then runs the full width and the
+   photograph takes its own row underneath. The issued artwork is 1.994 times
+   as wide as it is tall, so at 375px the plate stands 188px — small, but the
+   whole plate: lettering and all four emblems reach 91% of its width, and
+   cropping an official banner to win height is not a trade this layout makes.
+   Its transparent wedge at the top right shows the plate's own masthead
+   green, so the bar above appears to turn down along the artwork's sweep
+   rather than the artwork appearing to stop short.
+   ----------------------------------------------------------------------- */
+@media (max-width: 540px) {
+    /* The cover goes above its copy rather than beside it: below this the copy
+       column is under 300px, where the headline breaks every two or three
+       words. The cover keeps a stated width rather than filling the column —
+       a 3:4 cover blown up to 375px wide stands taller than the phone's
+       viewport, and the reader would meet the band as a wall of artwork with
+       the headline somewhere below the fold. */
+    .city-update-sheet {
+        gap: var(--s-4);
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .city-update-cover {
+        width: min(58%, 212px);
+    }
+    /* One row per cover again: two columns of 230px leave the thumbnail and a
+       clipped two-line title, which is not enough of either to choose from. */
+    .city-update-shelf {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    /* Flex, so the plate can be ordered ahead of the photograph. The plate is
+       the city's identity and leads the banner on the wide layout; stacking
+       must not hand that place to the photograph just because it comes first
+       in the document (where it has to, to sit underneath). */
+    .hero {
+        display: flex;
+        flex-direction: column;
+        aspect-ratio: auto;
+        max-height: none;
+    }
+    /* Whole, not cropped. The plate used to be given a height and a width
+       computed from it, which ran it off the right edge for the section to
+       clip — fair on the old artwork, whose content stopped at 49% of its
+       width, but the issued banner carries the office's lettering and all
+       four emblems out to 91%, so the same trick would cut them off.
+
+       So the plate takes the full viewport width and the artwork sets its own
+       height: every part of an official plate is on screen, at the exact
+       proportions it was drawn in. No ratio is declared here on purpose —
+       with the height intrinsic there is nothing for `--hero-ratio` to go
+       stale against, which is the one way the desktop layout can distort the
+       Mayor's portrait. `min-height: 0` keeps a column flex item's automatic
+       minimum (its content height) from fighting that.
+
+       The gradient fills the artwork's transparent wedge, in the green the
+       artwork itself is painted in (--field-*) rather than the bar's orange.
+       It answers to the plate it is touching, not to the bar two rows up. */
+    .hero-plate {
+        position: relative;
+        order: -1;
+        width: 100%;
+        max-width: none;
+        height: auto;
+        min-height: 0;
+        aspect-ratio: auto;
+        flex: none;
+        background: linear-gradient(
+            172deg,
+            var(--field-mid) 0%,
+            var(--field-from) 100%
+        );
+    }
+    /* Intrinsic height, so `fill` has nothing to fill against and the artwork
+       is simply itself. */
+    .hero-plate-art {
+        height: auto;
+    }
+    /* 16:9 now that nothing is laid over the photograph. The frame used to go
+       to 4:3 at this width to give the caption panel room; without the panel
+       that was only extra height between the reader and the first task.
+
+       `left: 0` because the panel is in flow here, not laid over the plate:
+       the wedge offset that puts the photograph to the right of the artwork on
+       the wide layout would, on a flow item, push its own row 613px off the
+       screen. */
+    .hero-photo-frame {
+        position: relative;
+        left: 0;
+        flex: none;
+        aspect-ratio: 16 / 9;
+        border-top: 1px solid var(--line);
+    }
+    /* Back to the foot of the banner. Above this width the photograph is the
+       layer underneath and the control sits in the plate's transparent wedge
+       at the top right; stacked, the photograph is its own row at the bottom,
+       and the wedge is the masthead gradient — a dark disc on dark green. */
+    .hero-pause {
+        top: auto;
+        bottom: var(--s-4);
+    }
+}
+
+/* --- The narrowest bar --------------------------------------------------
+   Measured, not estimated. At this size the lockup is 216px (seal, legal
+   name, national line), and the row also holds two 44px toggles. With the
+   bar's usual 24px gaps that is 352px, which the 358px column at 390px only
+   just holds; with 12px gaps it is 328px, which leaves 30px of slack at 390
+   and 15 at 375. So phones first give up gap, and keep the legal name.
+   ----------------------------------------------------------------------- */
+@media (max-width: 440px) {
+    .site-navbar-inner {
+        gap: var(--s-3);
+    }
+}
+
+/* Below 375px — the 360px and 320px phones — the 328px row no longer fits in
+   the column at all, so the lockup goes to its short form: the seal and
+   "City of Tanjay".
+
+   The legal name and the national line are what go, and they are not lost —
+   the identity strip directly above still reads "Official government website"
+   next to the GOVPH wordmark, which is the assurance those two lines were
+   carrying. What is kept is the part that cannot be stated anywhere else: the
+   seal, and whose city this is. */
+@media (max-width: 374px) {
+    .site-brand-republic,
+    .site-brand-name {
+        display: none;
+    }
+    .site-brand-name--short {
+        display: block;
+    }
+}

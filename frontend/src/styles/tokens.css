@@ -1,0 +1,442 @@
+/* ===========================================================================
+   Design tokens — City Government of Tanjay
+   ---------------------------------------------------------------------------
+   Every colour, radius, shadow, and type step used anywhere in the interface
+   is declared here once. Components reference tokens, never raw values, so a
+   single edit here re-themes the whole site.
+
+   One theme, deliberately. An official seal and a photographed mayor are a
+   fixed light artwork, and the masthead kept its own deep field in both themes
+   anyway, so the second palette only ever restated the first with worse
+   contrast on the two things nobody can recolour. The site declares
+   `color-scheme: light` and ships one set of values; a dark theme belongs back
+   here as a `[data-theme='dark']` block with its own measured numbers, not as
+   an inversion of these.
+
+   Palette rationale
+   - Surfaces are white, with warm paper for the alternate bands. A single
+     green-warm tint over the whole page once made the site read faintly
+     green; colour now arrives one section at a time instead, through the
+     section palettes below, each scoped to its own band.
+   - `--primary` is a deepened Tanjay green that clears 7:1 on white, which
+     lets it carry body-sized link text, not just headings.
+   - Gold is the civic accent taken from the city seal. Two steps: a darkened
+     `--gold` that passes AA as text, and `--gold-bright` for borders and
+     large marks only.
+   - The Philippine tricolour is scoped to the national identity strip. It is
+     an official convention, not decoration, and appears nowhere else.
+   =========================================================================== */
+
+/* The only Tailwind theme registration left. The interface is written in named
+   CSS classes rather than utilities, so the shadcn colour contract and the
+   generated radius and shadow utilities that used to live here had no callers;
+   the two families stay because Tailwind's preflight sets the document font
+   from them. The real values are all in :root below. */
+@theme inline {
+    --font-sans:
+        'Source Sans 3', ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display:
+        'Archivo', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+    /* --- Surfaces -------------------------------------------------------
+       --bg and --surface are both pure white: cards separate from the page
+       with a hairline --line, not with a fill, so they do not need to differ.
+
+       The alternate bands are paper, not grey. A flat #f0f0f0 reads as an
+       unstyled default; a warm off-white with a trace of the gold in it reads
+       as printed stock, and the white cards sitting on it look deliberate
+       rather than left over. The lines are warmed to match, so a hairline on
+       paper does not show up as a cold grey seam.
+       -------------------------------------------------------------------- */
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --sunken: #efebe2;
+    --wash: #f7f5ef;
+
+    /* --- Ink ------------------------------------------------------------ */
+    --fg: #15201c;
+    --ink-700: #2a3a34;
+    --ink-600: #3d524a;
+    --ink-500: #55685f; /* 5.8:1 on white — safe for body-sized meta text */
+    --ink-400: #7d8f87; /* 3.1:1 — large text and UI marks only */
+
+    /* --- Lines ---------------------------------------------------------- */
+    --line: #e6e2d8;
+    --line-strong: #cec7b8;
+
+    /* --- Primary: Tanjay green ------------------------------------------ */
+    --primary: #0f5c45; /* 8:1 on white */
+    --primary-700: #0b4836;
+    --primary-900: #07301f;
+    --primary-50: #e9f2ee;
+    --primary-fg: #ffffff;
+
+    /* --- Accent: civic gold --------------------------------------------- */
+    --gold: #8f6314; /* 5.3:1 on white — text safe */
+    --gold-bright: #b8832a; /* borders, rules, large marks */
+    --gold-50: #fbf5e7;
+    /* The gold that goes on a deep green field — the figures band and the
+       photo panels. --gold-bright only reaches 4.3:1 there, which is short of
+       AA for a 13px label; this clears 7.9:1 on --primary-900. */
+    --gold-on-dark: #e3b971;
+
+    /* --- Semantic ------------------------------------------------------- */
+    --danger: #a62b23;
+    --danger-50: #fbeeec;
+    --warn: #7d5a10;
+    --warn-50: #fdf6e6;
+
+    /* --- Ink on dark surfaces (the figures band, the hero photo panel) -- */
+    --on-dark: #e4efe9;
+    --on-dark-muted: #a9c0b6;
+    --on-dark-line: rgb(255 255 255 / 14%);
+    /* A control's own visible boundary, where --on-dark-line is only ever a
+       divider between two panels. The hero's pause button is the case that
+       needs it: its edge is what identifies it as a control over an arbitrary
+       photograph, which WCAG 1.4.11 holds to 3:1, and the 14% divider
+       composites to 1.5:1 on deep green — a control you cannot see is not a
+       control. 45% clears it at 4:1. */
+    --on-dark-mark: rgb(255 255 255 / 45%);
+
+    /* --- Masthead ------------------------------------------------------- */
+    /* The bar's own field, independent of --surface: it carries the seal and
+       white type, so it stays a deep official colour whatever the page does.
+
+       Four stops, and they travel rather than restate one colour. The bar
+       begins at a deep ember under the seal, opens into burnt orange, reaches
+       full strength at two thirds, and turns to a deep ochre at the far end —
+       the dark relative of the tricolour's yellow, which is the rule sitting
+       along the top of the bar and the reason the turn is allowed to be there.
+       Nothing on the bar is tinted by it: the type stays white, so what the
+       travel adds is depth across a 1200px strip rather than a second scheme.
+       The last two stops are the same luminance, 7:1, so the ochre turn reads
+       as a change of hue and not as a dark patch at the end of the bar.
+
+       Measured against white: 11.3 / 8.0 / 7.0 / 7.1:1 — every stop AAA, and
+       the same register as the deep greens this replaced (12.6 / 8.0 / 7.1 /
+       9.0), so the bar carries the same weight on the page and only the hue
+       has moved. The hue sits at 17-20deg and 90% saturation, which is as
+       bright as an orange can be made here: white type needs a dark field, and
+       a mid orange such as #d2590c measures 4.1:1, which would put the city's
+       legal name and every nav label under AA. Depth is what pays for the
+       colour, and an LGU masthead is the last place to spend contrast on one.
+       The first stop is held at 17deg rather than the 11deg it was first drawn
+       at, because at that hue and this depth the bar read as maroon under the
+       seal instead of as the warm end of an orange. */
+    --masthead-from: #6b2206;
+    --masthead-via: #8f3207;
+    --masthead-mid: #9c3807;
+    --masthead-to: #7f4d07;
+    /* A single bloom under the seal end of the bar, pale warm white rather
+       than the seal's gold. On the green field the gold read as light because
+       it was a hue apart from it; on orange it is the field's own hue and
+       would read as nothing at all. The bloom exists because the lockup is the
+       one place on the bar that should look lit: a flat field behind a seal
+       reads as a header, a lit one reads as a letterhead. It lands on the stop
+       with the most contrast to spare — white type over the bloom still
+       measures 9.0:1 — and it is gone by the middle of the bar. */
+    --masthead-glow: rgb(255 217 168 / 10%);
+    /* Hover fill and pressed well for controls sitting on the bar. Alpha
+       rather than opaque so the gradient still reads through them. */
+    --masthead-wash: rgb(255 255 255 / 12%);
+    --masthead-sunken: rgb(0 0 0 / 18%);
+    --masthead-line: rgb(255 255 255 / 24%);
+    /* A control's own boundary, as opposed to a divider between two panels.
+       WCAG 1.4.11 holds it to 3:1, which the 24% divider cannot manage on the
+       bar's orange (1.7:1). 70% reaches 4.0:1 there, with enough margin to
+       survive the texture shifting underneath it at other widths. The menu
+       toggle is the only control on the bar that needs it. */
+    --masthead-line-strong: rgb(255 255 255 / 70%);
+    /* The bar's own ink. NOT --primary-fg, which tracks --primary and so
+       inverts to dark ink in dark mode — correct for type on the light mint
+       --primary becomes there, wrong here, where the field stays a deep orange
+       in both themes and its ink has to stay white in both. */
+    --masthead-ink: #ffffff;
+    /* The second rank, for the lockup's kicker and caption and for placeholder
+       text. 85%, not the 80% it was on the green: measured on the finished bar
+       — texture and all — 80% came to 4.75:1 against the brightest part of the
+       field, which clears AA for the 10px kicker but with nothing left over,
+       and this is the one token on the bar whose text is small. 85% puts it
+       back at 5.1:1 and the two ranks are still plainly two ranks. */
+    --masthead-ink-muted: rgb(255 255 255 / 85%);
+
+    /* --- The ember field: the page's closing band ------------------------
+       The footer's own field, in the city's orange. Orange is the identity
+       now, and a page whose bar opens in orange and whose footer closed in
+       green was bracketed by two different institutions; the same field at
+       both ends reads as one document.
+
+       The bar's ramp, taken at two stops rather than four. The bar is a 21:1
+       strip and travels across it; the footer is a tall block, so it settles
+       downward instead — open at the bar's mid orange and sink to the deep
+       ember at the foot, which makes the last thing on the page the darkest.
+
+       Against white: 7.0 / 11.3:1, both AAA, so the footer's white type and
+       its 12px labels have room whichever stop they land on. */
+    --ember-from: #9c3807;
+    --ember-to: #6b2206;
+    /* The same warm bloom the bar carries under its seal, for the same reason:
+       the footer also opens on the seal, and a lit field beside a seal reads
+       as a letterhead where a flat one reads as a slab. */
+    --ember-glow: rgb(255 217 168 / 10%);
+    /* The ink on it. White, not --on-dark: that is a green-tinted white, and
+       on a field this warm it reads as a cold grey film rather than as paper.
+       85% for the second rank, which measures 5.5:1 at the lightest stop. */
+    --on-ember: #ffffff;
+    /* Three ranks, because the footer has three: its running text and
+       captions, its links at rest, and the brand name and whatever the cursor
+       is on. Links sit above the prose they are listed among without being as
+       loud as the name at the top, and 92% still leaves the hover a step to
+       take. Measured at the lightest stop: 5.1:1 and 6.2:1, both AA. */
+    --on-ember-link: rgb(255 255 255 / 92%);
+    --on-ember-muted: rgb(255 255 255 / 80%);
+    --on-ember-line: rgb(255 255 255 / 22%);
+    /* What the gold becomes here. --gold-on-dark is the civic accent on the
+       green fields, and on this one it measures 3.84:1 — under AA, and barely
+       a hue apart from the field besides. This cream is the bloom's own colour
+       at full strength, so it is the warm end of the same light the field is
+       lit by, and it holds 5.3:1 at the lightest stop and 8.5:1 at the
+       deepest. It carries the footer's labels and its hover strokes. */
+    --cream-on-ember: #ffd9a8;
+
+    /* --- The institution's deep field ------------------------------------
+       The deep official green the bar used to be, kept for the two fields
+       that are neither the bar nor the footer: the figures band, and the fill
+       behind the transparent wedge in the hero plate. This is not colour left
+       over from a theme change — the city seal is green and the banner artwork
+       the Information Office issues is green, and both of these fields sit
+       underneath or beside that artwork, so they answer to it.
+
+       Against white: 12.6 / 7.1 / 9.0:1. There is no --field-via because
+       nothing needs the stop between them. */
+    --field-from: #073b2d;
+    --field-mid: #0e6357;
+    --field-to: #0b5064;
+    /* The seal's own gold at a tenth strength: the bloom these fields want,
+       and the one the bar can no longer use now that it is orange. */
+    --field-glow: rgb(227 185 113 / 10%);
+
+    /* --- Masthead texture ------------------------------------------------ */
+    /* The city supplied a teal-to-chartreuse wave graphic for the bar. It
+       cannot be the field by itself: the bar is a ~21:1 strip and the artwork
+       is 2:1, so `cover` discards most of it, and its bright end leaves white
+       nav labels at 4.39:1 — under AA. So it runs beneath the green as
+       texture, and the scrim keeps the green in charge of contrast.
+       Served as a 2400x480 WebP (5KB) cropped from the 6000x3000 original: a
+       724KB JPEG for a 71px strip is not something to send to a phone on
+       mobile data. */
+    --masthead-texture: url('/image/hbg-masthead.webp');
+    /* How much of the bar's own colour sits over the artwork. Heavier at the
+       end where the artwork goes chartreuse, which is the end that fails
+       without it — and which is also the end that holds the search field,
+       whose 3:1 border is the tightest requirement on the bar. Scrimming the
+       right harder keeps the visible waves on the left, under the seal and
+       the city's name, which is where they read as texture rather than as a
+       bright patch. */
+    /* 80 at the left, 96 at the right, because that is how the contrast
+       headroom is distributed: the left end runs 14:1 against white type
+       where only 4.5 is needed, so the artwork can be spent there, while the
+       right end has barely any to give. The scrim gradient therefore tracks
+       the headroom rather than being flat.
+
+       These are unchanged by the bar going orange, and that is the point of
+       blending the artwork in `luminosity` (see .site-navbar): the blend moves
+       the artwork's hue and leaves its lightness alone, so the two numbers
+       tuned against its brightness still hold. Measured against the real
+       file, the worst white type on the finished bar is 7.0:1 — AAA, where
+       the green bar managed 6.3:1.
+
+       Two values across four stops: the first pair is the ember half of the
+       bar, where the artwork is dark enough to show through, and the second is
+       the ochre half, where it is not. */
+    --masthead-scrim: 80%;
+    --masthead-scrim-end: 96%;
+
+    /* --- Focus ---------------------------------------------------------- */
+    /* The gold outline is for light surfaces, where it clears 3:1 on both
+       --surface and --wash. Over the masthead's deep field it manages 2.3:1 at
+       the stop with the most room to give — a focus state nobody can see, and
+       worse on orange than on green because gold and orange are neighbours —
+       so base.css swaps in the flag's yellow for everything inside the bar.
+       That ring measures 5.1:1 at its weakest against the orange, up from
+       4.9:1 against the green. */
+    --focus: #b8832a;
+
+    /* --- Section palettes ----------------------------------------------
+       Each section of the home page is set in its own colour, so a reader
+       scrolling the page can tell one part from the next by colour as well
+       as by heading. They are drawn from Tanjay rather than from a swatch
+       book: sage for the fields, sea for the Tañon Strait, clay for the
+       town's brick and tile, civic blue from the flag, wine for the bound
+       record books a city keeps. Gold stays the Mayor's, as on the plate.
+
+       Four steps per family, measured on the family's own band and on
+       white:
+       -50   the band (section background)
+       -100  soft fills — tags, tiles, the programme audience strip
+       -500  strokes and rules; 3.6:1 or better on the band and on white, so
+             a rule can also mark a control's edge
+       -700  text; 5.6:1 or better on the band and on its own -100 fill
+       -------------------------------------------------------------------- */
+    --sage-50: #edf5f0;
+    --sage-100: #d5e8dc;
+    --sage-500: #4f8a6c;
+    --sage-700: #2f6b4f;
+
+    --sea-50: #eaf4f6;
+    --sea-100: #cfe5ea;
+    --sea-500: #2f8494;
+    --sea-700: #0d5f6e;
+
+    --clay-50: #fbf0ea;
+    --clay-100: #f3d9cb;
+    --clay-500: #c0623a;
+    --clay-700: #9a4526;
+
+    --civic-50: #eef2fa;
+    --civic-100: #d7e0f2;
+    --civic-500: #4a6ab3;
+    --civic-700: #21468f;
+    /* The dark end of the councillors' portrait discs; --gold-on-dark
+       initials hold 7.4:1 on it. */
+    --civic-900: #142c5c;
+
+    /* Parchment rather than a wine tint: a pink band reads as a warning,
+       and paper is what records are kept on. */
+    --wine-50: #f7f1e8;
+    --wine-100: #ecdcd3;
+    --wine-500: #a64a5b;
+    --wine-700: #7c2d3e;
+
+    /* --- Section accent: what a section's shared parts read -----------
+       The eyebrow, the heading rule, the portrait discs and the focus ring
+       all read these rather than a fixed colour. These are the defaults, the
+       city green with the gold stroke; a section palette in site.css
+       overrides them, and everything inside that section follows. */
+    --accent: var(--primary);
+    --accent-mark: var(--gold-bright);
+    --accent-soft: var(--primary-50);
+    --band: var(--surface);
+    --portrait-from: var(--primary);
+    --portrait-to: var(--primary-900);
+
+    /* --- Republic tricolour: identity strip only ------------------------ */
+    --ph-blue: #0038a8;
+    --ph-red: #ce1126;
+    --ph-yellow: #fcd116;
+
+    /* --- Radii ---------------------------------------------------------- */
+    --r-sm: 4px;
+    --r-md: 8px;
+    --r-lg: 14px;
+    --r-full: 999px;
+
+    /* --- Shadows: two only ---------------------------------------------- */
+    --shadow-raised:
+        0 1px 2px rgb(17 17 17 / 6%), 0 8px 24px -10px rgb(17 17 17 / 12%);
+    --shadow-overlay:
+        0 2px 4px rgb(17 17 17 / 8%), 0 18px 44px -14px rgb(17 17 17 / 20%);
+
+    /* --- Space scale: 4px base ------------------------------------------ */
+    --s-1: 4px;
+    --s-2: 8px;
+    --s-3: 12px;
+    --s-4: 16px;
+    --s-5: 24px;
+    --s-6: 32px;
+    --s-7: 48px;
+    --s-8: 64px;
+    --s-9: 96px;
+
+    /* --- Type scale ----------------------------------------------------- */
+    --t-2xs: 10px; /* lockup kickers and legal marks only — never body copy */
+    --t-xs: 12px;
+    --t-sm: 13px;
+    --t-base: 14px;
+    --t-md: 16px;
+    --t-lg: 18px;
+    --t-xl: 21px;
+    --t-2xl: 26px;
+    --t-3xl: 34px;
+    --t-4xl: 44px;
+    --t-5xl: 56px;
+
+    /* --- Layout --------------------------------------------------------- */
+    --container: 1200px;
+    --header-h: 71px; /* the sticky bar: republic rule + 68px row */
+
+    /* The banner's ratio, measured off the issued file. It must track the
+       plate: the box carries this ratio and the image is laid in with
+       `object-fit: fill`, so a stale value here does not letterbox, it
+       stretches the Mayor's official portrait. The plate before this one was
+       1774x787 and the value outlived it by one re-issue, squeezing a 1591x798
+       banner into a 2.254 box — 13% too wide.
+
+       Here rather than on `.hero`, because the loading skeleton has to hold
+       the same box while the banner is on its way, and a second copy of this
+       number is how the 13% happened the first time. */
+    --hero-ratio: 1591 / 798;
+    /* The banner's height cap, and the plate's width follows from it: at the
+       560px ceiling the plate is 1116px wide and the wedge opens at 891px, so
+       the artwork holds the left two thirds of a wide screen and the
+       photograph takes the rest.
+
+       A range, because a flat number has to answer to two different screens
+       and cannot. It was 620px flat, which on a 1280x800 laptop pushed the
+       whole of the latest updates band below the fold — the banner was the
+       page. It was then 440px flat, which fixed that laptop by capping every
+       screen to it: a 1080p desktop got the same 440px strip with half its
+       viewport left empty beneath.
+
+       So the banner is told what it may spend rather than what it is: 70vh of
+       whatever window it is in, never past 560px and never under 440px. On a
+       1280x800 laptop — about 720px of inner height — that is a 504px banner,
+       and the 71px bar above it still leaves roughly 145px of the updates band
+       in view: enough of the first row of covers to show a resident that the
+       page continues. The ceiling takes over at 800px of inner height, so a
+       1080p desktop gets the full 560px.
+
+       The floor is the old flat value, which is the one number here already
+       known to be safe, so no window ends up with a shorter banner than it has
+       today. It binds under about 630px of inner height, where the vh term
+       would start taking the banner below 440px and shrinking the artwork to
+       buy band space that the band does not need.
+
+       vh is safe to lean on here. Below 540px the banner stacks and drops the
+       cap entirely (`max-height: none` in site.css), and from there up to
+       roughly 1100px of width the ratio alone keeps the banner under these
+       numbers, so the cap only ever binds on a laptop or desktop window, where
+       the viewport height does not move under the reader the way a phone's
+       address bar moves. */
+    --hero-max: clamp(440px, 70vh, 560px);
+    /* Where the plate's transparent wedge opens, so the photograph can start
+       there instead of running the full width underneath. The wedge begins at
+       x 1270 of the artwork's 1591x798 canvas — 79.84% across — and the plate
+       is laid out from the banner's height, so the x depends on which of the
+       two regimes the banner is in: under the height cap the plate is exactly
+       as wide as the banner (79.84% of it), above the cap the plate stops at
+       --hero-max x the ratio and the wedge lands at 1.5915 x whatever the cap
+       resolved to — 891px at the 560px ceiling. The smaller of the two is the
+       live one, which is what `min` picks, so the offset stays right if the
+       cap or the breakpoints ever move. It is written against --hero-max
+       rather than restating that number, which is why the cap becoming a
+       `clamp()` of a viewport term needed no change here.
+
+       The percentage resolves against whatever this is used on, so it belongs
+       on the banner's own children and nowhere else. */
+    --hero-wedge: min(
+        calc(100% * 1270 / 1591),
+        calc(var(--hero-max) * 1270 / 798)
+    );
+
+    /* --- Motion --------------------------------------------------------- */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --d-micro: 160ms;
+    --d-enter: 320ms;
+    /* A rule drawing itself across: long enough to be seen travelling,
+       short enough to finish before the reader's eye arrives. */
+    --d-draw: 560ms;
+}

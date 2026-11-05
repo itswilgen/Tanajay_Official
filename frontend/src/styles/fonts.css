@@ -1,0 +1,107 @@
+/* ===========================================================================
+   Web fonts — self-hosted
+   ---------------------------------------------------------------------------
+   These used to be fetched and rewritten by laravel-vite-plugin's `fonts`
+   option, which left with the Laravel split. The files themselves are
+   unchanged — the same Bunny-sourced woff2 the plugin produced — and now sit
+   in public/fonts and are declared by hand.
+
+   Self-hosted, still deliberately: the masthead is the first thing drawn and
+   the city's legal name is set in the display face, so a third-party font
+   request would put a DNS lookup and a TLS handshake to another company's
+   server between a resident and their government's name. These are served
+   from the same origin and the same CDN edge as the page.
+
+   woff2 only. The plugin also emitted woff for browsers that predate 2017;
+   the build targets 2022 baseline, and every browser in it reads woff2, so
+   shipping both doubled the font payload for nobody.
+
+   Two families, six files, 92KB in total. Add a weight here only when a
+   component actually sets it — an unused @font-face is a download waiting to
+   be triggered by a stray `font-weight`.
+
+   `font-display: swap`, so text is readable in the fallback face immediately
+   and reflows once when the real one lands. For a page someone may be reading
+   on a slow connection to find an office's opening hours, text that is late
+   is worse than text that changes shape.
+
+   The unicode-range is the Latin subset the plugin selected: Latin-1 plus the
+   punctuation, currency and arrows the interface uses. Anything outside it —
+   should the city ever publish in a script these files do not cover — falls
+   back to the system face rather than silently rendering boxes.
+   =========================================================================== */
+
+@font-face {
+    font-family: 'Source Sans 3';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/source-sans-3-400-normal.woff2') format('woff2');
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+        U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Source Sans 3';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/source-sans-3-500-normal.woff2') format('woff2');
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+        U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Source Sans 3';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/source-sans-3-600-normal.woff2') format('woff2');
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+        U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Source Sans 3';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/source-sans-3-700-normal.woff2') format('woff2');
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+        U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Display face for mastheads and headlines. A grotesque rather than a serif:
+   the city's own lockup is set in a heavy condensed sans, and a serif heading
+   put the whole site at odds with the letterhead it sits under. */
+@font-face {
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/archivo-600-normal.woff2') format('woff2');
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+        U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/archivo-700-normal.woff2') format('woff2');
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+        U+2212, U+2215, U+FEFF, U+FFFD;
+}

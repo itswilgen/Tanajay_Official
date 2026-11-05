@@ -1,0 +1,313 @@
+/* ===========================================================================
+   Boot states — while the city's information is on its way, and when it does
+   not arrive
+   ---------------------------------------------------------------------------
+   These are new with the split and exist only because of it. The page used to
+   be rendered by the server with its records already in it, so there was no
+   moment at which the site existed but its content did not. Now there is one,
+   and on a phone on mobile data in Negros Oriental it is not always short.
+
+   Two states, and both are the city's page rather than a generic spinner:
+
+   LOADING is a skeleton shaped like what is coming — the tricolour rule, the
+   masthead bar, the banner at the banner's own ratio, then the updates band.
+   The shapes are what stop the layout jumping when the records land, which on
+   a page whose first screenful is a 1591x798 banner is the difference between
+   arriving and lurching. There is deliberately no spinner: a spinner says
+   "something is happening", a skeleton says "this is what is coming", and the
+   second is the more useful sentence.
+
+   FAILED is not a skeleton. A skeleton that never fills in is a lie, and the
+   reader needs to be told plainly, in terms they can act on. It carries the
+   seal, because a government page that cannot reach its database is still the
+   city's page, and the national emergency line, because the one reader this
+   state must not fail is the one who came here during an emergency.
+   =========================================================================== */
+
+.boot {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    background: var(--bg);
+}
+
+/* --- Loading ------------------------------------------------------------ */
+
+/* One block, one tone, one sweep. The tone is --sunken rather than a grey:
+   the page it stands in for is warm paper, and a cold grey skeleton reads as
+   a broken image rather than as a space being filled. */
+.boot-block {
+    position: relative;
+    overflow: hidden;
+    background: var(--sunken);
+}
+
+.boot-block::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        100deg,
+        transparent 20%,
+        rgb(255 255 255 / 55%) 50%,
+        transparent 80%
+    );
+    content: '';
+    transform: translateX(-100%);
+    animation: boot-sweep 1600ms var(--ease-out) infinite;
+}
+
+@keyframes boot-sweep {
+    to {
+        transform: translateX(100%);
+    }
+}
+
+/* The sweep is the one piece of motion here and base.css already reduces it
+   to nothing under `prefers-reduced-motion`. It is held off-canvas there
+   rather than left mid-sweep, so what remains is a still, even block. */
+@media (prefers-reduced-motion: reduce) {
+    .boot-block::after {
+        display: none;
+    }
+}
+
+/* The sticky bar's row, at exactly its height: --header-h is the republic
+   rule plus the row, and the rule above this block is the real one.
+
+   It is the city's own field rather than a grey block, and it is NOT a
+   `.boot-block`: a skeleton bar in --sunken sat flush against a --sunken
+   banner and the two read as a single 510px slab, which is the one thing
+   this screen exists to prevent. Drawn in the bar's colour it is instantly
+   the masthead, and when the real one arrives only its contents appear.
+
+   `--masthead-via` alone, not a copy of the four-stop gradient: it is the
+   opaque base .site-navbar already declares under its own scrims for exactly
+   this reason — what the bar is when nothing else has loaded. Reusing that
+   one token means there is no second gradient here to drift out of step.
+
+   No sweep either. The sweep says "this is being filled in", which is true of
+   the content below and not of the bar, whose field is already final. */
+.boot-bar {
+    display: flex;
+    height: calc(var(--header-h) - 3px);
+    align-items: center;
+    background-color: var(--masthead-via);
+}
+
+.boot-bar-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+}
+
+/* The lockup, at the real one's geometry: the 54px seal, then the Republic,
+   the city's legal name and the province on three lines. Translucent white,
+   which is the ink the bar carries — these are the shapes of the words that
+   are about to be there, at 18% so they read as placeholders rather than as
+   something to try to decipher. */
+.boot-seal {
+    flex: none;
+    width: 54px;
+    height: 54px;
+    border-radius: var(--r-full);
+    background: rgb(255 255 255 / 18%);
+}
+
+.boot-lockup {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.boot-lockup span {
+    height: 8px;
+    border-radius: var(--r-sm);
+    background: rgb(255 255 255 / 18%);
+}
+
+.boot-lockup span:nth-child(1) {
+    width: 168px;
+}
+
+/* The legal name, set larger than the two lines around it, as it is. */
+.boot-lockup span:nth-child(2) {
+    width: 248px;
+    height: 14px;
+}
+
+.boot-lockup span:nth-child(3) {
+    width: 186px;
+}
+
+/* The banner, at the banner's ratio and ceiling — the same two values the
+   real one uses, read from the same tokens, so the skeleton cannot drift out
+   of step with it. */
+.boot-hero {
+    width: 100%;
+    max-height: var(--hero-max);
+    aspect-ratio: var(--hero-ratio);
+    border-bottom: 1px solid var(--line);
+}
+
+/* The updates band under the banner: four covers in a row, which is what the
+   band draws at desktop width. */
+.boot-band {
+    padding: clamp(var(--s-6), 5vw, var(--s-8)) 0;
+    background: var(--wash);
+}
+
+.boot-band-grid {
+    display: grid;
+    gap: var(--s-5);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.boot-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+}
+
+/* 3:4, the magazine cover the band's cards carry. */
+.boot-card .boot-block:first-child {
+    aspect-ratio: 3 / 4;
+    border-radius: var(--r-md);
+}
+
+/* Two lines of a title, the second short, as a real title breaks. */
+.boot-line {
+    height: 12px;
+    border-radius: var(--r-sm);
+}
+
+.boot-line--short {
+    width: 60%;
+}
+
+@media (max-width: 860px) {
+    .boot-band-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 540px) {
+    /* The legal name is the short form on a narrow bar and the province drops
+       out of the lockup entirely, so the skeleton drops the same line rather
+       than promising a third one that is not coming. */
+    .boot-lockup span:nth-child(2) {
+        width: 150px;
+    }
+    .boot-lockup span:nth-child(3) {
+        display: none;
+    }
+
+    /* The banner stacks on a phone — artwork above, photograph below — so its
+       height stops being a ratio of its width. This matches the stacked
+       arrangement rather than pretending the wide one is still coming. */
+    .boot-hero {
+        max-height: none;
+        aspect-ratio: 3 / 4;
+    }
+    .boot-band-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* --- Failed ------------------------------------------------------------- */
+
+.boot-failure {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--s-8) var(--s-5);
+    text-align: center;
+}
+
+.boot-failure-inner {
+    display: flex;
+    max-width: 52ch;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s-4);
+}
+
+.boot-failure .seal-slot {
+    width: 72px;
+    height: 72px;
+}
+
+.boot-failure h1 {
+    font-size: clamp(var(--t-2xl), 4vw, var(--t-3xl));
+    text-wrap: balance;
+}
+
+.boot-failure p {
+    color: var(--ink-600);
+    font-size: var(--t-md);
+    line-height: 1.65;
+    text-wrap: pretty;
+}
+
+/* What actually went wrong, set as the technical aside it is: a reader does
+   not need it, and the person they telephone about it does. Monospaced
+   because it holds a URL and a status code, which are read character by
+   character and not as prose. */
+.boot-failure-detail {
+    max-width: 100%;
+    padding: var(--s-2) var(--s-3);
+    overflow-wrap: break-word;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: var(--wash);
+    color: var(--ink-500);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: var(--t-xs);
+}
+
+.boot-failure-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s-3);
+    margin-top: var(--s-2);
+}
+
+/* The emergency line, ruled off from the apology above it. This is the one
+   piece of content on the page that still works when nothing else does, so
+   it is the last thing in the reading order and the only thing below the
+   rule — not a footnote, a destination. */
+.boot-emergency {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s-2);
+    width: 100%;
+    margin-top: var(--s-6);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--line);
+}
+
+.boot-emergency p {
+    color: var(--ink-500);
+    font-size: var(--t-base);
+}
+
+.boot-emergency a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    color: var(--danger);
+    font-family: var(--font-display);
+    font-size: var(--t-2xl);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+
+.boot-emergency a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+}

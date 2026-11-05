@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- Paint the page background before the stylesheet loads, so a slow
+             connection never flashes the wrong colour. This value must stay
+             equal to --bg in src/styles/tokens.css. -->
+        <style>
+            html {
+                background-color: #ffffff;
+            }
+        </style>
+
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+        <!-- The two faces the masthead needs on the first paint, asked for
+             before the stylesheet that declares them is parsed. The rest of
+             the family loads on demand. -->
+        <link
+            rel="preload"
+            href="/fonts/archivo-700-normal.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+        <link
+            rel="preload"
+            href="/fonts/source-sans-3-400-normal.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+
+        <!-- The banner artwork and the seal are the two largest things in the
+             first screenful and neither is discoverable until React has run,
+             so they are asked for now rather than after the bundle. -->
+        <link
+            rel="preload"
+            href="/image/mayor-plate.webp"
+            as="image"
+            type="image/webp"
+            imagesrcset="/image/mayor-plate-900.webp 900w, /image/mayor-plate.webp 1591w"
+            imagesizes="(max-width: 880px) 100vw, 880px"
+        />
+
+        <!-- This is a client-rendered page, so these tags are the only thing a
+             crawler or a link preview reads: everything React draws arrives
+             after the fetch. They are therefore written out in full and held
+             static, rather than being left to the `useDocumentMeta` effect
+             that keeps the live document in step with the city record. The
+             two must say the same thing — see src/lib/document-meta.ts. -->
+        <title>City Government of Tanjay</title>
+        <meta
+            name="description"
+            content="Official website of the City Government of Tanjay, Negros Oriental — city services and requirements, public notices, transparency records, and emergency hotlines."
+        />
+        <link rel="canonical" href="https://tanjay.gov.ph/" />
+        <meta name="theme-color" content="#6b2206" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="City Government of Tanjay" />
+        <meta property="og:title" content="City Government of Tanjay" />
+        <meta
+            property="og:description"
+            content="Official website of the City Government of Tanjay, Negros Oriental — city services and requirements, public notices, transparency records, and emergency hotlines."
+        />
+        <meta property="og:image" content="/image/seal-512.webp" />
+        <meta name="twitter:card" content="summary" />
+    </head>
+    <body class="antialiased">
+        <!-- No skip link here: SiteHeader renders the site's one skip link, and
+             a second copy in the markup would give a keyboard reader two links
+             to the same landmark. While the city's information is still being
+             fetched there is no chrome to skip past and nothing yet to do, so
+             the boot screen carries `id="main"` and nothing focusable. -->
+        <div id="app"></div>
+        <script type="module" src="/src/main.tsx"></script>
+    </body>
+</html>

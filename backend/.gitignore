@@ -1,0 +1,33 @@
+# The API's own ignores. Cross-cutting ones are at the repo root.
+
+/vendor
+/.phpunit.cache
+.phpunit.result.cache
+/bootstrap/ssr
+
+# `php artisan storage:link` makes this, and it is a symlink into
+# storage/app/public — a machine-local path, so it is created per checkout
+# rather than committed. Re-run storage:link after a fresh clone, or the
+# office's uploaded posters 404.
+/public/storage
+
+# Signing and encryption keys, and Pail's log buffer.
+/storage/*.key
+/storage/pail
+
+# Local configuration. .env.example is committed; this is not.
+.env
+.env.backup
+.env.production
+/auth.json
+
+# Laravel's old asset build. Nothing here serves HTML any more — the bundle is
+# built in frontend/ and deployed to Vercel — so these only appear if someone
+# runs a Vite build in the wrong directory.
+/public/build
+/public/hot
+/public/fonts-manifest.dev.json
+
+.phpactor.json
+Homestead.json
+Homestead.yaml

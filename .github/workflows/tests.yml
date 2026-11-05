@@ -1,3 +1,7 @@
+# One workflow, two jobs, because the repo is now two deployable applications
+# with nothing in common at build time. They run in parallel: neither one's
+# checks need the other's artefacts, and a failure should name which half broke
+# rather than leaving someone to read a combined log.
 name: tests
 
 on:
@@ -10,8 +14,12 @@ permissions:
   contents: read
 
 jobs:
-  ci:
+  backend:
+    name: backend (API)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
 
     steps:
       - name: Checkout code
@@ -26,13 +34,49 @@ jobs:
           tools: composer:v2
           coverage: none
 
+      # Pint, PHPStan and the 85 feature tests. The tests cover the API's
+      # payload contract — see HomePageTest's key-set assertion, which is what
+      # catches a field added to the controller and not to the front end's
+      # HomePayload type.
+      - name: Setup application
+        run: composer setup
+
+      - name: Run checks
+        run: composer ci:check
+
+  frontend:
+    name: frontend (site)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '22'
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
-      - name: Setup Application
-        run: composer setup
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Run CI Checks
-        run: composer ci:check
+      # Format, lint, then types. The build is last and is the one that would
+      # catch an unresolved import, which neither the linter nor tsc sees.
+      - name: Check formatting and lint
+        run: pnpm run check
+
+      - name: Check types
+        run: pnpm run types:check
+
+      - name: Build
+        run: pnpm run build

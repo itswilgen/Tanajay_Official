@@ -1,0 +1,44 @@
+{
+    "$schema": "https://www.schemastore.org/package.json",
+    "name": "tanjay-portal-frontend",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vp build",
+        "dev": "vp dev",
+        "preview": "vp preview",
+        "check": "vp check",
+        "check:fix": "vp check --fix",
+        "types:check": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@tailwindcss/vite": "^4.1.11",
+        "@types/react": "^19.2.0",
+        "@types/react-dom": "^19.2.0",
+        "@vitejs/plugin-react": "^6.1.1",
+        "lucide-react": "^0.475.0",
+        "motion": "^14.7.1",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
+        "tailwindcss": "^4.0.0",
+        "typescript": "^5.7.2",
+        "vite": "^8.0.0"
+    },
+    "devDependencies": {
+        "@rolldown/plugin-babel": "^0.2.3",
+        "@types/node": "^22.13.5",
+        "babel-plugin-react-compiler": "^1.0.0",
+        "vite-plus": "0.3.0"
+    },
+    "optionalDependencies": {
+        "@rollup/rollup-linux-x64-gnu": "4.9.5",
+        "@rollup/rollup-win32-x64-msvc": "4.9.5",
+        "@tailwindcss/oxide-linux-x64-gnu": "^4.0.1",
+        "@tailwindcss/oxide-win32-x64-msvc": "^4.0.1",
+        "lightningcss-linux-x64-gnu": "^1.29.1",
+        "lightningcss-win32-x64-msvc": "^1.29.1"
+    },
+    "overrides": {
+        "tinypool": "^2.1.2"
+    }
+}

@@ -1,0 +1,34 @@
+/* ===========================================================================
+   City Government of Tanjay — stylesheet manifest
+   ---------------------------------------------------------------------------
+   Layers load in cascade order, narrowing from system to section:
+
+     fonts    the two self-hosted families, declared before anything sets them
+     tokens   colour, type, space, radius, shadow, motion
+     base     reset, typography, and shared primitives (buttons, notices…)
+     site     public chrome and the home page
+     boot     the loading skeleton and the failed-to-load state
+
+   Everything downstream of `tokens` references variables, never raw values,
+   so re-theming the site happens in one file. Add a layer here when a new
+   section lands, and keep it after `site` so section rules win.
+
+   `boot` is last because it is the newest and the narrowest: it only styles
+   the two states the page can be in before it has any content, and it reads
+   the same tokens the real chrome does so the skeleton holds the real boxes.
+   =========================================================================== */
+
+@import 'tailwindcss';
+
+@import './fonts.css';
+@import './tokens.css';
+@import './base.css';
+@import './site.css';
+@import './boot.css';
+
+/* Where Tailwind looks for class names. The interface is written in named CSS
+   classes rather than utilities, so this is a short list: the components, and
+   the one `antialiased` on index.html's body. It replaced `@source '../views'`
+   — the Blade templates — when the front end split off from Laravel. */
+@source '../';
+@source '../../index.html';
