@@ -51,6 +51,31 @@ export type HomePayload = {
 };
 
 /**
+ * A demonstration build: no API at all.
+ *
+ * With VITE_DEMO=1 the site reads one committed snapshot of `/api/home`
+ * instead of calling a server. The front end deploys on its own — a static
+ * host is one command, a Laravel app with Postgres and a storage disk is
+ * not — and in between the two a portal that can only draw its own error
+ * screen is not worth putting in front of anyone.
+ *
+ * It is a declared flag and not a fallback after a failed request. The
+ * fallback is the more convenient design and the wrong one: the first time
+ * the real API went down, the site would quietly serve a months-old snapshot
+ * as though it were current, and no reader would be told. A build either
+ * talks to the City Government's API or it is a demonstration of the pages,
+ * and it has to say which of the two it is.
+ *
+ * What the snapshot holds is the sample set DemoContentSeeder writes, every
+ * record of which says in its own copy that it is a sample — so this cannot
+ * put invented notices in front of a reader as the city's own.
+ */
+const DEMO = import.meta.env.VITE_DEMO === '1';
+
+/** Where that snapshot sits, served by the static host out of `public/`. */
+const DEMO_SOURCE = '/demo/home.json';
+
+/**
  * Where the City Government's API answers.
  *
  * One variable, set at build time, because a static bundle has no server to
@@ -61,10 +86,18 @@ export type HomePayload = {
  * Trailing slashes are stripped here rather than guarded against at every
  * call site: `https://api.example/` and `https://api.example` are the same
  * host, and only one of them produces a usable URL when something is appended.
+ *
+ * Empty in a demonstration build, and that is what makes the snapshot work
+ * unchanged: `resolveUploads` below prefixes this to every `storage/` path it
+ * finds, so an empty base resolves each one against the site's own origin,
+ * where the copies under `public/storage` are. Nothing else has to know.
  */
-export const API_URL = (
-    import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
-).replace(/\/+$/, '');
+export const API_URL = DEMO
+    ? ''
+    : (import.meta.env.VITE_API_URL ?? 'http://localhost:8000').replace(
+          /\/+$/,
+          '',
+      );
 
 /**
  * Why a request for the city's information failed, in the terms the reader
@@ -144,10 +177,14 @@ function resolveUploads<T>(value: T): T {
  * failure and must not be drawn as one.
  */
 export async function fetchHome(signal: AbortSignal): Promise<HomePayload> {
+    /* Named once. All three failures below print it, and an address the
+       reader's own browser was refused is the only useful thing anyone
+       telephoned about this page can act on. */
+    const source = DEMO ? DEMO_SOURCE : `${API_URL}/api/home`;
     let response: Response;
 
     try {
-        response = await fetch(`${API_URL}/api/home`, {
+        response = await fetch(source, {
             signal,
             headers: { Accept: 'application/json' },
         });
@@ -165,7 +202,7 @@ export async function fetchHome(signal: AbortSignal): Promise<HomePayload> {
             navigator.onLine
                 ? {
                       kind: 'unreachable',
-                      detail: `${API_URL}/api/home did not answer (${reason}).`,
+                      detail: `${source} did not answer (${reason}).`,
                   }
                 : { kind: 'offline', detail: reason },
         );
@@ -175,7 +212,7 @@ export async function fetchHome(signal: AbortSignal): Promise<HomePayload> {
         throw new ApiError({
             kind: 'http',
             status: response.status,
-            detail: `${API_URL}/api/home answered ${response.status}.`,
+            detail: `${source} answered ${response.status}.`,
         });
     }
 

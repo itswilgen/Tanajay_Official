@@ -1,0 +1,856 @@
+{
+    "name": "Tanjay City Public Information Portal",
+    "city": {
+        "name": "City of Tanjay",
+        "legal_name": "City Government of Tanjay",
+        "province": "Province of Negros Oriental",
+        "region": "Negros Island Region",
+        "region_note": "Formerly Region VII · Central Visayas",
+        "republic": "Republic of the Philippines",
+        "tagline": "Official website of the City Government of Tanjay",
+        "charter": "Cityhood granted under Republic Act No. 9026 (2001)",
+        "office_hours": {
+            "weekdays": "Monday to Friday, 8:00 AM – 5:00 PM",
+            "note": "Closed on weekends and declared holidays. No noon break."
+        },
+        "contact": {
+            "address": "Tanjay City Government Center, Rizal Street, Tanjay City, Negros Oriental 6204",
+            "trunkline": "(035) 527 0823",
+            "email": "info@tanjaycity.gov.ph",
+            "verified": false
+        },
+        "hotlines": [
+            {
+                "label": "City Disaster Risk Reduction (CDRRMO)",
+                "number": "(035) 415 3062",
+                "available": "24 hours"
+            },
+            {
+                "label": "Tanjay City Police Station",
+                "number": "(035) 415 9319",
+                "available": "24 hours"
+            },
+            {
+                "label": "Bureau of Fire Protection – Tanjay",
+                "number": "(035) 415 8626",
+                "available": "24 hours"
+            },
+            {
+                "label": "City Health Unit – emergency",
+                "number": "(035) 415 8462",
+                "available": "24 hours"
+            },
+            {
+                "label": "Ambulance / urgent care",
+                "number": "(035) 415 3119",
+                "available": "24 hours"
+            },
+            {
+                "label": "National Emergency Hotline",
+                "number": "911",
+                "available": "24 hours"
+            }
+        ],
+        "hotlines_verified": false,
+        "feedback": {
+            "national": {
+                "label": "8888 Citizens’ Complaint Hotline",
+                "number": "8888",
+                "note": "The national hotline for complaints about any government office or employee, run by the Office of the President."
+            }
+        },
+        "figures": [
+            {
+                "value": "84,593",
+                "label": "Residents",
+                "note": "2024 census"
+            },
+            {
+                "value": "24",
+                "label": "Barangays",
+                "note": "Nine of them Poblacion"
+            },
+            {
+                "value": "267.05",
+                "label": "Square kilometres",
+                "note": "Total land area"
+            },
+            {
+                "value": "1580",
+                "label": "Founded",
+                "note": "Parish established 11 June"
+            }
+        ],
+        "figures_note": "Population from the 2024 census. Tanjay became a component city on 1 April 2001 under Republic Act No. 9026.",
+        "transparency": [
+            {
+                "title": "Citizen's Charter",
+                "description": "Every frontline service, the documents it needs, the fee, and how long it must take.",
+                "href": null,
+                "available": false,
+                "basis": "RA 11032"
+            },
+            {
+                "title": "Full Disclosure Policy",
+                "description": "Budget, procurement, and the quarterly financial reports the city is obliged to publish.",
+                "href": null,
+                "available": false,
+                "basis": "DILG MC 2011-134"
+            },
+            {
+                "title": "Freedom of Information",
+                "description": "How to request a public record from the City Government, and what to expect back.",
+                "href": null,
+                "available": false,
+                "basis": "Local FOI ordinance"
+            },
+            {
+                "title": "Data privacy notice",
+                "description": "What this site collects, why, and the rights you hold over it.",
+                "href": null,
+                "available": false,
+                "basis": "RA 10173"
+            }
+        ]
+    },
+    "navigation": [
+        {
+            "label": "Home",
+            "href": "/",
+            "items": []
+        },
+        {
+            "label": "The City",
+            "href": null,
+            "items": [
+                {
+                    "label": "City Profile",
+                    "href": "#figures",
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Getting Here",
+                    "href": "#contact",
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Tanjay Hymn",
+                    "href": null,
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "History",
+                    "href": null,
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Barangays",
+                    "href": null,
+                    "note": null,
+                    "items": []
+                }
+            ]
+        },
+        {
+            "label": "Invest",
+            "href": null,
+            "items": [
+                {
+                    "label": "The City in Figures",
+                    "href": "#figures",
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Permits and Requirements",
+                    "href": "#information",
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Reach City Hall",
+                    "href": "#contact",
+                    "note": null,
+                    "items": []
+                }
+            ]
+        },
+        {
+            "label": "Government",
+            "href": null,
+            "items": [
+                {
+                    "label": "Citizen's Charter",
+                    "href": "#transparency",
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Executive Department",
+                    "href": null,
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Sangguniang Panlungsod",
+                    "href": null,
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Vision, Mission and Goals",
+                    "href": null,
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "GAD Corner",
+                    "href": null,
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Executive Orders",
+                    "href": null,
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Awards",
+                    "href": null,
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Directory",
+                    "href": null,
+                    "note": null,
+                    "items": [
+                        {
+                            "label": "Emergency Hotlines",
+                            "href": "#hotlines",
+                            "note": null
+                        },
+                        {
+                            "label": "City Hall Contact",
+                            "href": "#contact",
+                            "note": null
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Transparency",
+            "href": null,
+            "items": [
+                {
+                    "label": "Citizen's Charter",
+                    "href": "#transparency",
+                    "note": "RA 11032 · not yet published",
+                    "items": []
+                },
+                {
+                    "label": "Full Disclosure Policy",
+                    "href": "#transparency",
+                    "note": "DILG MC 2011-134 · not yet published",
+                    "items": []
+                },
+                {
+                    "label": "Freedom of Information",
+                    "href": "#transparency",
+                    "note": "Local FOI ordinance · not yet published",
+                    "items": []
+                },
+                {
+                    "label": "Data privacy notice",
+                    "href": "#transparency",
+                    "note": "RA 10173 · not yet published",
+                    "items": []
+                }
+            ]
+        },
+        {
+            "label": "Services",
+            "href": null,
+            "items": [
+                {
+                    "label": "Services & requirements",
+                    "href": "#information",
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Job vacancies",
+                    "href": "#information",
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Scholarships",
+                    "href": "#information",
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Announcements",
+                    "href": "#information",
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Emergency hotlines",
+                    "href": "#hotlines",
+                    "note": null,
+                    "items": []
+                },
+                {
+                    "label": "Transparency & records",
+                    "href": "#transparency",
+                    "note": null,
+                    "items": []
+                }
+            ]
+        }
+    ],
+    "heroPhotos": [
+        {
+            "path": "storage/hero-slides/cRQ9PU5x8ZA1Uq8Zlia4OULDk4YV5BlY9ANYJi6d.jpg",
+            "alt": "The Tanjay City Government Center: a multi-storey building in glass and stone, with the city seal on its tower and a stepped plaza in front."
+        },
+        {
+            "path": "storage/hero-slides/q1ghL4vQ4TYY8JtGSZSop410ppO45ZmpgWXafVpg.jpg",
+            "alt": "Rolling green hills scattered with houses, a paved road winding between them, and a mountain range beyond."
+        },
+        {
+            "path": "storage/hero-slides/tsUv9AMVApij4NhpzVScaX83v2qQtLpVniGsHBHF.jpg",
+            "alt": "Officials in barong tagalog on the steps of the Government Center, one holding up a large ceremonial key lettered Tanjay City Government Center."
+        },
+        {
+            "path": "storage/hero-slides/ScclN3gSCOA2OCQNcvA0T04wJuIhRvdJaX5vfOfT.jpg",
+            "alt": "A large crowd assembled under a covered court, with sacks and boxes stacked in the foreground and uniformed officers in the front row."
+        },
+        {
+            "path": "storage/hero-slides/CLBmrWdsIWBvDFXMQ52ez6lx0N3lwQywEgFmMOa8.jpg",
+            "alt": "A group standing behind a yellow ribbon stretched across a newly concreted road, with palms and greenery behind."
+        },
+        {
+            "path": "storage/hero-slides/EZ5hjfvrHcCBUBPWARJRMcqYG1eOPLrXTdSAV6XT.jpg",
+            "alt": "People standing outdoors with their right hands over their hearts during a flag ceremony, a flagpole and a building behind them."
+        },
+        {
+            "path": "storage/hero-slides/PG2bBvCkyC52N9znx9jCQcHlCZ5UtfglIBJTqKY5.jpg",
+            "alt": "Residents of all ages seated and standing together for a group photograph inside a decorated community hall."
+        },
+        {
+            "path": "storage/hero-slides/vbZH2CDw8s0m5xfEu0CM14v4I0FET1KIKJ2Kiw1Y.jpg",
+            "alt": "Rows of young people in numbered white and gold jerseys performing together on a gymnasium floor."
+        }
+    ],
+    "cityUpdates": [
+        {
+            "id": 1,
+            "category": "City magazine",
+            "title": "Tanjay Frontliner, Volume I",
+            "standfirst": "Sample — shows how an issue of the city magazine is presented, with its cover beside the summary. No issue is being released by this record.",
+            "body": "Demonstration content only. This is where the City Information Office would summarise the issue: what it covers, which offices contributed, and where a printed copy can be collected. Replace it before publication.",
+            "cover": "storage/posters/demo/update-frontliner.webp",
+            "published_at": "2026-11-03T23:27:26+08:00"
+        },
+        {
+            "id": 2,
+            "category": "Public works",
+            "title": "Public market renewal",
+            "standfirst": "Sample — shows how a project update reads: what stage the work has reached and which office is answerable for it. No actual project is being reported.",
+            "body": "Demonstration content only. This is where the City Engineer’s Office would state what has been completed, what is still in progress, and what it means for vendors and shoppers while the work continues.",
+            "cover": "storage/posters/demo/update-market.webp",
+            "published_at": "2026-10-30T23:27:26+08:00"
+        },
+        {
+            "id": 3,
+            "category": "Environment",
+            "title": "Tanjay River embankment",
+            "standfirst": "Sample — shows how an environmental or flood-control update is presented. No actual works, findings or schedule are being reported.",
+            "body": "Demonstration content only. This is where the office responsible would report the condition of the embankment and any advice for residents living along the river.",
+            "cover": "storage/posters/demo/update-riverwalk.webp",
+            "published_at": "2026-10-25T23:27:26+08:00"
+        },
+        {
+            "id": 4,
+            "category": "Digital services",
+            "title": "City services online",
+            "standfirst": "Sample — shows how a change to how a service is delivered is announced. No service is actually moving online by this record.",
+            "body": "Demonstration content only. This is where the office would name the services involved, what a resident needs to use them, and what stays available over the counter at City Hall.",
+            "cover": "storage/posters/demo/update-eservices.webp",
+            "published_at": "2026-10-18T23:27:26+08:00"
+        }
+    ],
+    "shortcuts": [
+        {
+            "icon": "file-text",
+            "cover": "requirements",
+            "title": "Services & requirements",
+            "description": "Checklists, fees, and where to go for permits, clearances, and civil registry requests.",
+            "href": "#information",
+            "cta": "See what is published"
+        },
+        {
+            "icon": "briefcase",
+            "cover": "jobs",
+            "title": "Job vacancies",
+            "description": "Plantilla and contractual postings from city offices, with closing dates and requirements.",
+            "href": "#information",
+            "cta": "See what is published"
+        },
+        {
+            "icon": "graduation-cap",
+            "cover": "scholarships",
+            "title": "Scholarships",
+            "description": "Educational assistance programmes, eligibility, and application deadlines.",
+            "href": "#information",
+            "cta": "See what is published"
+        },
+        {
+            "icon": "megaphone",
+            "cover": "announcements",
+            "title": "Announcements",
+            "description": "Advisories, suspensions, and official notices from the City Government.",
+            "href": "#information",
+            "cta": "See what is published"
+        },
+        {
+            "icon": "phone",
+            "cover": "hotlines",
+            "title": "Emergency hotlines",
+            "description": "Disaster response, police, fire, and health numbers answered around the clock.",
+            "href": "#hotlines",
+            "cta": "View the numbers"
+        },
+        {
+            "icon": "scale",
+            "cover": "transparency",
+            "title": "Transparency & records",
+            "description": "What the City Government is obliged to disclose, and what is still being prepared.",
+            "href": "#transparency",
+            "cta": "See obligations"
+        }
+    ],
+    "guides": [
+        {
+            "id": 1,
+            "title": "Get a community tax certificate (cedula)",
+            "summary": "Sample guide — shows how a walk-in service is laid out. Steps, fee and time must be confirmed by the office.",
+            "steps": [
+                "Sample step — go to the office named below during office hours.",
+                "Sample step — present the requirements and fill in the form.",
+                "Sample step — pay any fee at the cashier and keep the official receipt."
+            ],
+            "requirements": [
+                "Sample requirement — one valid government-issued ID",
+                "Sample requirement — the office’s own form"
+            ],
+            "fee": "Sample — to be confirmed by the office",
+            "processing_time": "Sample — to be confirmed by the office",
+            "office": "City Treasurer’s Office"
+        },
+        {
+            "id": 2,
+            "title": "Renew a business permit",
+            "summary": "Sample guide — shows how a permit renewal with several offices is laid out.",
+            "steps": [
+                "Sample step — go to the office named below during office hours.",
+                "Sample step — present the requirements and fill in the form.",
+                "Sample step — pay any fee at the cashier and keep the official receipt."
+            ],
+            "requirements": [
+                "Sample requirement — one valid government-issued ID",
+                "Sample requirement — the office’s own form"
+            ],
+            "fee": "Sample — to be confirmed by the office",
+            "processing_time": "Sample — to be confirmed by the office",
+            "office": "Business Permits and Licensing Office"
+        },
+        {
+            "id": 3,
+            "title": "Request a copy of a birth certificate",
+            "summary": "Sample guide — shows how a civil registry request is laid out.",
+            "steps": [
+                "Sample step — go to the office named below during office hours.",
+                "Sample step — present the requirements and fill in the form.",
+                "Sample step — pay any fee at the cashier and keep the official receipt."
+            ],
+            "requirements": [
+                "Sample requirement — one valid government-issued ID",
+                "Sample requirement — the office’s own form"
+            ],
+            "fee": "Sample — to be confirmed by the office",
+            "processing_time": "Sample — to be confirmed by the office",
+            "office": "City Civil Registry Office"
+        },
+        {
+            "id": 4,
+            "title": "Apply for a barangay clearance",
+            "summary": "Sample guide — shows how a service handled at barangay level is laid out.",
+            "steps": [
+                "Sample step — go to the office named below during office hours.",
+                "Sample step — present the requirements and fill in the form.",
+                "Sample step — pay any fee at the cashier and keep the official receipt."
+            ],
+            "requirements": [
+                "Sample requirement — one valid government-issued ID",
+                "Sample requirement — the office’s own form"
+            ],
+            "fee": "Sample — to be confirmed by the office",
+            "processing_time": "Sample — to be confirmed by the office",
+            "office": "Your barangay hall"
+        }
+    ],
+    "mayorsDesk": {
+        "message": {
+            "name": "Hon. Jose “PEPE” T. Orlino",
+            "position": "City Mayor",
+            "photo": "storage/officials/mayor-portrait.webp",
+            "text": "Sample message — this is where the Mayor’s own words to the people of Tanjay will appear, in a short paragraph or two. Replace it with the message the Mayor’s office issues before publication."
+        },
+        "agenda": [
+            {
+                "id": 1,
+                "title": "Health",
+                "summary": "Sample — the Mayor’s office states its health priority here, in a sentence or two."
+            },
+            {
+                "id": 2,
+                "title": "Education",
+                "summary": "Sample — the Mayor’s office states its education priority here, in a sentence or two."
+            },
+            {
+                "id": 3,
+                "title": "Agriculture",
+                "summary": "Sample — the Mayor’s office states its agriculture priority here, in a sentence or two."
+            },
+            {
+                "id": 4,
+                "title": "Infrastructure",
+                "summary": "Sample — the Mayor’s office states its infrastructure priority here, in a sentence or two."
+            },
+            {
+                "id": 5,
+                "title": "Livelihood",
+                "summary": "Sample — the Mayor’s office states its livelihood priority here, in a sentence or two."
+            },
+            {
+                "id": 6,
+                "title": "Peace and order",
+                "summary": "Sample — the Mayor’s office states its peace and order priority here, in a sentence or two."
+            },
+            {
+                "id": 7,
+                "title": "Environment",
+                "summary": "Sample — the Mayor’s office states its environment priority here, in a sentence or two."
+            },
+            {
+                "id": 8,
+                "title": "Good governance",
+                "summary": "Sample — the Mayor’s office states its good governance priority here, in a sentence or two."
+            }
+        ]
+    },
+    "notices": [
+        {
+            "id": 7,
+            "category": "Announcements",
+            "title": "Sample notice flagged urgent — how a class or work suspension is published",
+            "description": "This record demonstrates the urgency flag an office can set on a notice. No suspension is being announced.",
+            "poster": "storage/posters/demo/notice-advisory.webp",
+            "published_at": "2026-11-05T22:27:26+08:00"
+        },
+        {
+            "id": 2,
+            "category": "Job Vacancies",
+            "title": "Sample public service assistant opening",
+            "description": "Example vacancy record for demonstrating requirements and publication dates.",
+            "poster": "storage/posters/demo/notice-vacancy.webp",
+            "published_at": "2026-09-20T00:00:00+08:00"
+        },
+        {
+            "id": 3,
+            "category": "Scholarships",
+            "title": "Example student assistance application",
+            "description": "A placeholder scholarship listing showing where eligibility and application details will appear.",
+            "poster": "storage/posters/demo/notice-scholarship.webp",
+            "published_at": "2026-09-16T00:00:00+08:00"
+        },
+        {
+            "id": 4,
+            "category": "Services",
+            "title": "Example certificate request guide",
+            "description": "A sample service guide for showing requirements and detail page behaviour.",
+            "poster": "storage/posters/demo/notice-certificate.webp",
+            "published_at": "2026-09-12T00:00:00+08:00"
+        },
+        {
+            "id": 5,
+            "category": "Announcements",
+            "title": "Public information portal demonstration notice",
+            "description": "This record demonstrates how an announcement appears in the public listing.",
+            "poster": "storage/posters/demo/notice-portal.webp",
+            "published_at": "2026-09-09T00:00:00+08:00"
+        }
+    ],
+    "events": [
+        {
+            "id": 1,
+            "title": "Sample event — a one-day public activity",
+            "description": "Sample — no event is being announced by this record.",
+            "venue": "Venue to be confirmed",
+            "starts_at": "2026-11-08T08:00:00+08:00",
+            "ends_at": null,
+            "poster": "storage/posters/demo/event-activity.webp"
+        },
+        {
+            "id": 2,
+            "title": "Sample event — a public hearing",
+            "description": "Sample — no event is being announced by this record.",
+            "venue": "Venue to be confirmed",
+            "starts_at": "2026-11-14T14:00:00+08:00",
+            "ends_at": null,
+            "poster": "storage/posters/demo/event-hearing.webp"
+        },
+        {
+            "id": 3,
+            "title": "Sample event — a multi-day festival",
+            "description": "Sample — no event is being announced by this record.",
+            "venue": "Venue to be confirmed",
+            "starts_at": "2026-11-21T09:00:00+08:00",
+            "ends_at": "2026-11-25T18:00:00+08:00",
+            "poster": "storage/posters/demo/event-festival.webp"
+        },
+        {
+            "id": 4,
+            "title": "Sample event — a service caravan in the barangays",
+            "description": "Sample — no event is being announced by this record.",
+            "venue": "Venue to be confirmed",
+            "starts_at": "2026-12-02T08:00:00+08:00",
+            "ends_at": null,
+            "poster": "storage/posters/demo/event-caravan.webp"
+        }
+    ],
+    "programs": [
+        {
+            "id": 1,
+            "title": "Sample programme — assistance for senior citizens",
+            "summary": "Sample — shows how a programme is described: what it gives and who qualifies. Not an announcement of an actual programme.",
+            "audience": "Senior citizens",
+            "office": "Office of Senior Citizens Affairs",
+            "how_to_apply": "Sample — the office states where to apply and what to bring.",
+            "poster": "storage/posters/demo/program-seniors.webp"
+        },
+        {
+            "id": 2,
+            "title": "Sample programme — educational assistance",
+            "summary": "Sample — shows how a programme is described: what it gives and who qualifies. Not an announcement of an actual programme.",
+            "audience": "Students",
+            "office": "City Scholarship Office",
+            "how_to_apply": "Sample — the office states where to apply and what to bring.",
+            "poster": "storage/posters/demo/program-education.webp"
+        },
+        {
+            "id": 3,
+            "title": "Sample programme — seeds and farm inputs",
+            "summary": "Sample — shows how a programme is described: what it gives and who qualifies. Not an announcement of an actual programme.",
+            "audience": "Farmers and fisherfolk",
+            "office": "City Agriculture Office",
+            "how_to_apply": "Sample — the office states where to apply and what to bring.",
+            "poster": "storage/posters/demo/program-farm.webp"
+        },
+        {
+            "id": 4,
+            "title": "Sample programme — crisis assistance",
+            "summary": "Sample — shows how a programme is described: what it gives and who qualifies. Not an announcement of an actual programme.",
+            "audience": "Families in need",
+            "office": "City Social Welfare and Development Office",
+            "how_to_apply": "Sample — the office states where to apply and what to bring.",
+            "poster": "storage/posters/demo/program-crisis.webp"
+        },
+        {
+            "id": 5,
+            "title": "Sample programme — livelihood start-up support",
+            "summary": "Sample — shows how a programme is described: what it gives and who qualifies. Not an announcement of an actual programme.",
+            "audience": "Small businesses",
+            "office": "City Livelihood Office",
+            "how_to_apply": "Sample — the office states where to apply and what to bring.",
+            "poster": "storage/posters/demo/program-livelihood.webp"
+        },
+        {
+            "id": 6,
+            "title": "Sample programme — free consultation days",
+            "summary": "Sample — shows how a programme is described: what it gives and who qualifies. Not an announcement of an actual programme.",
+            "audience": "Every resident",
+            "office": "City Health Office",
+            "how_to_apply": "Sample — the office states where to apply and what to bring.",
+            "poster": "storage/posters/demo/program-health.webp"
+        }
+    ],
+    "publicServants": [
+        {
+            "id": 1,
+            "branch": "executive",
+            "position": "City Mayor",
+            "name": "Hon. Jose “PEPE” T. Orlino",
+            "photo": "storage/officials/mayor-portrait.webp",
+            "committee": null,
+            "is_principal": true
+        },
+        {
+            "id": 2,
+            "branch": "legislative",
+            "position": "City Vice Mayor",
+            "name": null,
+            "photo": null,
+            "committee": "Presiding Officer, Sangguniang Panlungsod",
+            "is_principal": true
+        },
+        {
+            "id": 3,
+            "branch": "legislative",
+            "position": "City Councilor 1",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        },
+        {
+            "id": 4,
+            "branch": "legislative",
+            "position": "City Councilor 2",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        },
+        {
+            "id": 5,
+            "branch": "legislative",
+            "position": "City Councilor 3",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        },
+        {
+            "id": 6,
+            "branch": "legislative",
+            "position": "City Councilor 4",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        },
+        {
+            "id": 7,
+            "branch": "legislative",
+            "position": "City Councilor 5",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        },
+        {
+            "id": 8,
+            "branch": "legislative",
+            "position": "City Councilor 6",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        },
+        {
+            "id": 9,
+            "branch": "legislative",
+            "position": "City Councilor 7",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        },
+        {
+            "id": 10,
+            "branch": "legislative",
+            "position": "City Councilor 8",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        },
+        {
+            "id": 11,
+            "branch": "legislative",
+            "position": "City Councilor 9",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        },
+        {
+            "id": 12,
+            "branch": "legislative",
+            "position": "City Councilor 10",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        },
+        {
+            "id": 13,
+            "branch": "legislative",
+            "position": "Liga ng mga Barangay President",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        },
+        {
+            "id": 14,
+            "branch": "legislative",
+            "position": "SK Federation President",
+            "name": null,
+            "photo": null,
+            "committee": "Sample — committee to be confirmed",
+            "is_principal": false
+        }
+    ],
+    "recognitions": [
+        {
+            "id": 1,
+            "title": "Sample recognition 1 — award title to be confirmed",
+            "conferred_by": "Conferring agency to be confirmed",
+            "year": 2026,
+            "badge": null
+        },
+        {
+            "id": 2,
+            "title": "Sample recognition 2 — award title to be confirmed",
+            "conferred_by": "Conferring agency to be confirmed",
+            "year": 2026,
+            "badge": null
+        },
+        {
+            "id": 3,
+            "title": "Sample recognition 3 — award title to be confirmed",
+            "conferred_by": "Conferring agency to be confirmed",
+            "year": 2025,
+            "badge": null
+        },
+        {
+            "id": 4,
+            "title": "Sample recognition 4 — award title to be confirmed",
+            "conferred_by": "Conferring agency to be confirmed",
+            "year": 2025,
+            "badge": null
+        }
+    ]
+}

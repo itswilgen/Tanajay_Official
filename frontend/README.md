@@ -48,17 +48,35 @@ it is the only one of the three that catches an unresolved import.
 
 ## Configuration
 
-One variable, and it is read at **build** time, not run time — the output is
-static files with no server to ask. Changing it means a redeploy, not a
+Two variables, and both are read at **build** time, not run time — the output
+is static files with no server to ask. Changing either means a redeploy, not a
 restart.
 
 | Variable       | Example                     | Notes                                                                                                                                                             |
 | -------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `VITE_API_URL` | `https://api.tanjay.gov.ph` | No trailing slash. Must be https in production: a page served over https cannot fetch over http, and the browser blocks it with nothing on screen to explain why. |
+| `VITE_DEMO`    | `1`, or unset               | Builds the demonstration: the site reads a committed snapshot and makes no request to any API. `VITE_API_URL` is then not read at all. See below.                 |
 
-`.env.example` documents it in full. Nothing in a `VITE_*` variable can be a
+`.env.example` documents both in full. Nothing in a `VITE_*` variable can be a
 secret: Vite inlines each one into the shipped bundle, where anyone can read
 it.
+
+### The one failure that looks like a broken deployment
+
+A deployed site that works on the machine it was built from and on no other
+device has `http://localhost:8000` compiled into its bundle — the default in
+`src/api.ts`, which is what a build with no `VITE_API_URL` set falls back to.
+`localhost` is whatever device the browser is running on, so it finds the
+developer's own `php artisan serve` and nothing on anyone else's machine.
+
+Check it without redeploying anything:
+
+```bash
+grep -o 'localhost:8000' dist/assets/*.js
+```
+
+A hit means the variable was not set at build time. Setting it in Vercel is
+not enough on its own — the value is compiled in, so it takes a new build.
 
 ## Deploying to Vercel
 
@@ -74,6 +92,34 @@ it.
    silently falls back to `http://localhost:8000` and the deployed page cannot
    load.
 5. Deploy.
+
+### A demonstration deploy, with no backend
+
+The front end can go up on its own, before the Laravel app has anywhere to
+live. Set **`VITE_DEMO=1`** instead of `VITE_API_URL`, for Production and
+Preview both, and the site draws itself from `public/demo/home.json` with the
+sample set's photographs and posters beside it under `public/storage`. It
+makes no request to any API, so there is no address to configure and no CORS
+to allow — steps 1, 2, 3 and 5 above, and nothing else.
+
+What it shows is the sample set `DemoContentSeeder` writes. Every record says
+in its own copy that it is a sample, which is what makes it safe to publish:
+nobody is going to read an invented suspension notice as the city's.
+
+It is a snapshot, so it is only as current as the day it was taken.
+Regenerate it from a seeded local backend when the sample set changes:
+
+```bash
+cd backend && php artisan serve          # and seed it, if stale
+python3 tools/demo-snapshot/snapshot.py  # from the repository root
+```
+
+`tools/demo-snapshot/README.md` covers what that refuses to do and why. When
+the API does get an address, unset `VITE_DEMO`, set `VITE_API_URL`, redeploy,
+and the snapshot stops being read — it is deliberately **not** a fallback for
+an API that fails to answer, because a site quietly serving months-old records
+as current is worse than one that says it cannot reach them. The note on
+`DEMO` in `src/api.ts` has the full reasoning.
 
 ### Then allow this site back, on the backend
 
