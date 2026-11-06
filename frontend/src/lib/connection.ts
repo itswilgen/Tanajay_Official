@@ -32,17 +32,21 @@ function subscribe(onChange: () => void): () => void {
  *
  * It exists for the banner. The City Information Office has published eight
  * photographs at 2048px — 2.9MB in total — and the banner rotates through
- * every one of them within a minute of the page opening. On the desktop
- * layout that is a banner 1425px wide; on a phone it is 390px, and the whole
- * 2.9MB is spent redrawing a strip a fifth of that size.
+ * every one of them within a minute of the page opening.
+ *
+ * The phone is no longer the case this protects. Below 700px the banner is a
+ * single flattened plate and the carousel is not mounted at all, so no phone
+ * asks for any of those eight files; what is left for this hook is the
+ * tethered laptop, the desktop on a metered hotspot, and the 2G connection on
+ * a wide screen — where the slideshow is still 2.9MB and still optional.
  *
  * The real fix is derivatives: the API should offer each photograph at a few
- * widths and the banner should name them in `srcset`, so a phone is sent a
- * 390px copy of one. Until there is something to resize them, this is the
+ * widths and the banner should name them in `srcset`, so a narrow window is
+ * sent a narrow copy. Until there is something to resize them, this is the
  * part that can be done honestly — a reader who has turned on Data Saver, or
  * is on 2G, is shown the first photograph and no more. They lose a slideshow.
- * They keep the banner, the plate, the advisory and every service on the
- * page, which is what they came for.
+ * They keep the banner, the plate and every service on the page, which is
+ * what they came for.
  *
  * `saveData` is an explicit request and is honoured on its own.
  * `effectiveType` is a measurement, and only its bottom two rungs count:

@@ -2,6 +2,7 @@ import { Image as ImageIcon, Pause, Play } from 'lucide-react';
 import { useReducedMotion } from 'motion/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useThriftyConnection } from '@/lib/connection';
+import { useMediaQuery } from '@/lib/viewport';
 import { useCity } from './city';
 
 export type HeroPhoto = {
@@ -35,6 +36,39 @@ const CROSSFADE = 700;
    ------------------------------------------------------------------------- */
 
 const PLATE = { w: 1591, h: 798 };
+
+/* --- The phone banner ----------------------------------------------------
+   The same artwork, flattened.
+
+   The office issues the plate with a transparent wedge down its right-hand
+   side, which on the wide layout is what the photograph shows through. A phone
+   has no room for that composition: stacked, the wedge opened onto nothing and
+   the stylesheet was painting a green gradient into it to stand in for the
+   photograph that was no longer behind it — a colour invented here, for a hole
+   in official artwork, on the one layout where the artwork is the entire
+   banner.
+
+   So the phone gets the plate as a complete rectangle instead. It is not new
+   artwork: `design/source-art/image/newTemplate.png` is the issued file before
+   the wedge was cut, and these two WebPs are reductions of it — the same
+   pixels, the same ratio, nothing cropped and nothing drawn on top.
+
+   Two widths, both sized for a phone rather than for a desktop that will never
+   ask for them: 800 covers a 390px screen at 2x, 1400 covers 390 at 3x and the
+   700px top of the mobile layout at 2x.
+   ------------------------------------------------------------------------- */
+
+const SOLID_SRC = '/image/mayor-plate-solid.webp';
+const SOLID_SRCSET =
+    '/image/mayor-plate-solid-800.webp 800w, /image/mayor-plate-solid.webp 1400w';
+
+/* The breakpoint this component branches on. It is the width at which the
+   header gives up its row of menu cells for the hamburger, so it is already
+   the line between "the desktop composition" and "a phone", and the hero rules
+   in site.css are written against the same number — grep `--- The phone
+   banner` there. See lib/viewport.ts for why this one decision is made in
+   TypeScript rather than in the stylesheet. */
+const PHONE = '(max-width: 700px)';
 
 /* The artwork is an image of text, so its alt text has to carry that text — a
    reader on a screen reader should get the office's slogan, not "banner". The
@@ -81,6 +115,11 @@ export function CityHero({ photos }: { photos: HeroPhoto[] }) {
        is resized derivatives from the API, and this is what can be done
        until there are some. */
     const thrifty = useThriftyConnection();
+    /* Asked in React rather than in CSS because the answer decides what is
+       mounted, not how it looks: a carousel hidden with `display: none` still
+       fetches eight 2048px photographs and still runs its timer behind the
+       hidden box. See lib/viewport.ts. */
+    const phone = useMediaQuery(PHONE);
     const [active, setActive] = useState(0);
     const [outgoing, setOutgoing] = useState<HeroPhoto | null>(null);
     const [paused, setPaused] = useState(false);
@@ -128,6 +167,57 @@ export function CityHero({ photos }: { photos: HeroPhoto[] }) {
         },
         [],
     );
+
+    /* A phone: the banner, and nothing else.
+
+       This is an early return rather than a stylesheet rule because of what it
+       does not do. The photographs are never requested, so a resident on
+       mobile data pays ~30KB for the banner instead of 2.9MB for eight
+       2048px files; the rotation never starts, so there is no moving content
+       to pause and WCAG 2.2.2 has nothing to ask for; and `useThriftyConnection`
+       stops being the only thing standing between a metered connection and
+       that payload, because on a phone the payload is gone.
+
+       No entrance animation. On this layout the banner is the largest thing on
+       the first screen and therefore the element the browser measures as the
+       largest contentful paint — starting it at `opacity: 0` would delay the
+       moment the page is readable in order to decorate it. The wide layout
+       keeps its entrance, where the photograph underneath paints first.
+
+       If the artwork fails to load, the section collapses to its heading and
+       the page simply begins with the first band of content. There is nothing
+       honest to put in its place: the banner is identity, the header directly
+       above it already carries the seal, the legal name and the province, and
+       a grey 2:1 box or an apology where the city's banner should be tells a
+       resident less than no banner at all. */
+    if (phone) {
+        return (
+            <section
+                /* Its own block, deliberately not `hero hero--…`. The wide
+                   hero declares an aspect ratio, a height ceiling and
+                   `overflow: hidden`, and a modifier here would have to undo
+                   all three — the ratio most of all, since the whole point of
+                   this arrangement is that the artwork sets its own. */
+                className={`hero-solid${plateBroken ? ' is-missing' : ''}`}
+            >
+                <h1 className="sr-only">{city.legal_name}</h1>
+                {!plateBroken && (
+                    <img
+                        className="hero-solid-art"
+                        src={SOLID_SRC}
+                        srcSet={SOLID_SRCSET}
+                        sizes="100vw"
+                        width={PLATE.w}
+                        height={PLATE.h}
+                        alt={PLATE_ALT}
+                        fetchPriority="high"
+                        decoding="async"
+                        onError={() => setPlateBroken(true)}
+                    />
+                )}
+            </section>
+        );
+    }
 
     const slide = photos[active];
 

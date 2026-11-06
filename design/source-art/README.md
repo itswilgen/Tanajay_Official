@@ -13,7 +13,7 @@ of them.
 
 ## What the site actually serves
 
-`frontend/public/image/`, which is five files and 275KB:
+`frontend/public/image/`, which is eight files and 378KB:
 
 | Served                 | Derived from                 | Why                                                                                     |
 | ---------------------- | ---------------------------- | --------------------------------------------------------------------------------------- |
@@ -21,7 +21,9 @@ of them.
 | `seal-192.webp` (17KB) | `OfficialLogo.png`           | The 2× file, for a retina screen                                                         |
 | `seal-512.webp` (72KB) | `OfficialLogo.png`           | Not the masthead: the watermark behind the figures band, which is drawn at 560px, and the `og:image` |
 | `mayor-plate.webp`     | `newTemplate.png` (1.4MB)    | The home banner, 1591×798                                                                |
-| `mayor-plate-900.webp` | `newTemplate.png`            | The narrow-viewport banner                                                               |
+| `mayor-plate-900.webp` | `newTemplate.png`            | The narrow-viewport banner, down to 701px                                                |
+| `mayor-plate-solid.webp` (69KB) | `newTemplate.png`   | The phone banner, 1400×702. The plate as a complete rectangle — no transparent wedge      |
+| `mayor-plate-solid-800.webp` (30KB) | `newTemplate.png` | The same, at 800×401: a 390px screen at 2×                                              |
 | `hbg-masthead.webp`    | `hbg.jpg` (708KB, 6000×3000) | Cropped to 2400×480 for a 71px strip, and 5KB instead of 708KB                           |
 
 And the browser icons, in `frontend/public/` rather than `public/image/` because
@@ -54,6 +56,39 @@ and the 256px files are indistinguishable. Match the slot, not the artwork.
 
 `mayor-plate.png` is the flattened full-size export of the banner, between
 `newTemplate.png` and the WebP.
+
+### The two banners
+
+The office's plate has a transparent wedge cut down its right-hand side, which
+on the wide layout is what the home photograph shows through. A phone has no
+room for that composition: stacked, the wedge opened onto nothing. So below
+700px the site serves `newTemplate.png` as issued — the plate before the wedge
+was cut, a complete rectangle, nothing cropped and nothing drawn on top — and
+above it the wedged `mayor-plate.webp`. Two files, one artwork. The two
+`mayor-plate-solid-*` sizes are reductions of the issued PNG:
+
+```sh
+# from the repository root. Pillow is on the Homebrew python3, not the default one
+/opt/homebrew/bin/python3 -c "
+from PIL import Image
+src = Image.open('design/source-art/image/newTemplate.png').convert('RGB')
+for w in (1400, 800):
+    stem = 'mayor-plate-solid' + ('' if w == 1400 else f'-{w}')
+    h = round(src.height * w / src.width)
+    src.resize((w, h), Image.LANCZOS).save(
+        f'frontend/public/image/{stem}.webp', quality=82, method=6)
+"
+```
+
+Both are sized for a phone rather than for a desktop that will never ask for
+them, and `.convert('RGB')` is deliberate: the issued file has no wedge to keep
+transparent, and dropping the alpha channel is most of why 1400px of plate
+costs less per pixel here than the 900px wedged copy does.
+
+Note the trap this folder exists to prevent. The issued PNG is 1.4MB, and a
+copy of it left in `frontend/public/image/` is ten times the weight of
+everything else the site serves put together, uploaded to Vercel's CDN,
+referenced by nothing. Derive into `public/image/`; keep the original here.
 
 ## Replacing a piece of artwork
 

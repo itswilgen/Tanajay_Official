@@ -201,13 +201,13 @@
         display: none;
     }
 
-    /* The banner stacks on a phone — artwork above, photograph below — so its
-       height stops being a ratio of its width. This matches the stacked
-       arrangement rather than pretending the wide one is still coming. */
-    .boot-hero {
-        max-height: none;
-        aspect-ratio: 3 / 4;
-    }
+    /* The banner used to be overridden to 3:4 here, because on a phone it
+       stacked into two rows — the artwork above, a 16:9 photograph below. It
+       is one image again: below 700px the hero is the plate on its own, at the
+       artwork's own ratio, which is what --hero-ratio already says. So the
+       override is gone and the base rule is correct at every width. A
+       skeleton that reserved 3:4 for a 2:1 banner would hand the reader a
+       collapse of half the banner's height the moment the real one arrived. */
     .boot-band-grid {
         grid-template-columns: minmax(0, 1fr);
     }

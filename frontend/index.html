@@ -51,11 +51,35 @@
             crossorigin
         />
 
-        <!-- The banner artwork and the seal are the two largest things in the
-             first screenful and neither is discoverable until React has run,
-             so they are asked for now rather than after the bundle. -->
+        <!-- The banner artwork is the largest thing in the first screenful and
+             is not discoverable until React has run, so it is asked for now
+             rather than after the bundle.
+
+             Two preloads, because the two layouts want different files and a
+             preload that guesses wrong is worse than none: it spends the
+             connection's first moments on an image the page will not use and
+             then starts the real one late. A phone gets the plate flattened
+             into a complete rectangle; above 700px it gets the issued plate
+             with its transparent wedge, which the photograph shows through.
+             `not all and` rather than `min-width: 701px` so the two queries
+             are exact complements — at a fractional viewport width, 700/701
+             would leave a gap where neither matched.
+
+             The 700px here is the same breakpoint as `PHONE` in
+             src/components/site/city-hero.tsx and the phone banner block in
+             src/styles/site.css. Three places, one decision. -->
         <link
             rel="preload"
+            media="(max-width: 700px)"
+            href="/image/mayor-plate-solid.webp"
+            as="image"
+            type="image/webp"
+            imagesrcset="/image/mayor-plate-solid-800.webp 800w, /image/mayor-plate-solid.webp 1400w"
+            imagesizes="100vw"
+        />
+        <link
+            rel="preload"
+            media="not all and (max-width: 700px)"
             href="/image/mayor-plate.webp"
             as="image"
             type="image/webp"

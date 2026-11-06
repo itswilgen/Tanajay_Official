@@ -359,6 +359,16 @@
    standing still.
    ----------------------------------------------------------------------- */
 .primary-nav {
+    /* Which of the two menu layouts is in force, published for the hover
+       handlers in site-header.tsx to read. It inherits to every cell, so a
+       pointer entering one can ask the stylesheet what it is inside instead of
+       carrying a copy of the breakpoint in TypeScript — which would go stale
+       the day the media query moves, and the symptom would be dropdowns
+       opening on hover inside the hamburger panel. The other value is set in
+       the max-width: 1240px block; these two declarations are the whole
+       contract. */
+    --nav-mode: bar;
+
     display: flex;
     align-items: stretch;
     justify-content: flex-end;
@@ -609,6 +619,114 @@ a.nav-panel-link:active,
 }
 .primary-nav > a.is-active::after {
     background: var(--gold-on-dark);
+}
+
+/* --- The phone banner ---------------------------------------------------
+   At 700px and below the hero is one image: the plate as a complete
+   rectangle, full-bleed, at the artwork's own ratio. The two-layer
+   composition is gone there, and with it the photograph, the pause button and
+   the gradient that used to fill the plate's transparent wedge.
+
+   The breakpoint is named in city-hero.tsx as `PHONE`, because the component
+   has to decide whether the carousel is mounted at all and a stylesheet
+   cannot stop a hidden element from downloading its images. These rules and
+   that constant are one decision in two places — keep them in step.
+
+   No ratio is declared and no height is set. `width: 100%` with the file's
+   own `width`/`height` attributes gives the box the artwork's proportions
+   exactly, which is the one arrangement that cannot stretch the Mayor's
+   portrait if --hero-ratio and the issued file ever disagree. It is also why
+   there is no `object-fit` here: there is no box to fit to.
+   ----------------------------------------------------------------------- */
+.hero-solid {
+    position: relative;
+    width: 100%;
+    /* The settle below scales the artwork up by 1.5% at its first frame, which
+       on a full-bleed image is about 3px past each edge of a 390px screen.
+       Unclipped that is a horizontal scrollbar on the first frame of every
+       page load, which is a worse bug than the animation is an effect. */
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    /* Behind the artwork while it decodes, and visible at no other time: the
+       banner is opaque and covers this exactly. The orange is the bar's own,
+       the row directly above, so the half-second before it paints reads as
+       the masthead continuing rather than as a grey gap opening under it. */
+    background: var(--masthead-from);
+}
+
+/* --- The banner's arrival -----------------------------------------------
+   Two gestures, and between them they are the page's one hero moment: the
+   plate settles onto the page, and the city's gold rule signs it off.
+
+   Both are transform-only, and that is the constraint everything here is
+   shaped around rather than a detail of it. On this layout the banner is the
+   largest thing on the first screen, so it is the element the browser
+   measures as the largest contentful paint — the moment the page counts as
+   readable. An `opacity: 0` entrance moves that moment later by the length of
+   the animation: the prettier the fade, the longer a resident on mobile data
+   looks at nothing. A transform leaves the paint where it is. The artwork is
+   drawn at full opacity on the first frame and then settles the last 1.5% of
+   its scale, so the effect costs no measured performance at all.
+
+   CSS rather than Motion, for the same reason the wide layout's plate uses
+   CSS: this is the banner of a government homepage and it should not need
+   JavaScript to finish arriving. It also picks up the reduced-motion reset in
+   base.css for free, which collapses both animations to their end state —
+   `both` is what makes that land on the settled, drawn-in result rather than
+   on the first frame.
+   ----------------------------------------------------------------------- */
+.hero-solid-art {
+    display: block;
+    width: 100%;
+    height: auto;
+    animation: plate-settle 620ms var(--ease-out) both;
+}
+@keyframes plate-settle {
+    from {
+        transform: scale(1.015);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/* The gold rule, opening outward from the centre along the banner's bottom
+   edge — the same gesture as the pair of strokes beside every section label
+   further down the page, which is what makes it read as this site's and not
+   as an effect. It starts after the settle is underway rather than with it,
+   so the two are a sequence and not a flourish.
+
+   `bottom: 0` and not `-1px`: the clip above is a padding-box clip, and a
+   rule laid over the border would be cut off by it. */
+.hero-solid::after {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: min(180px, 44%);
+    height: 2px;
+    background: var(--gold-bright);
+    content: '';
+    animation: plate-rule var(--d-draw) var(--ease-out) 240ms both;
+}
+@keyframes plate-rule {
+    from {
+        transform: translateX(-50%) scaleX(0);
+    }
+    to {
+        transform: translateX(-50%) scaleX(1);
+    }
+}
+
+/* The artwork did not load. No border, no background, no reserved height, and
+   no rule to sign off a banner that is not there — see the note in
+   city-hero.tsx. The heading inside is screen-reader text and draws nothing,
+   so the page closes up as though the banner were never there. */
+.hero-solid.is-missing {
+    border-bottom: 0;
+    background: none;
+}
+.hero-solid.is-missing::after {
+    display: none;
 }
 
 /* Only ever shown below 1180px, where it sits on the bar's orange — so it is
@@ -3260,6 +3378,13 @@ a.transparency-inner:hover .transparency-state {
        panel, the entries go back to stacked rows and the moving rule gives way
        to a left mark, which is what reads at this size. */
     .primary-nav {
+        /* The other half of the contract described on the base rule: hover
+           does not open anything in here. These are stacked accordion rows a
+           pointer has to travel through to reach the ones below it, and the
+           panel is opened by the hamburger in the first place — which is a
+           tap, on the devices that get it. */
+        --nav-mode: panel;
+
         position: absolute;
         top: 100%;
         right: 0;
@@ -3579,13 +3704,10 @@ a.transparency-inner:hover .transparency-state {
         width: 21px;
         height: 21px;
     }
-    /* Tucked a step further into the corner: the banner is around 300px tall
-       here, and 16px of inset is a larger share of that than of the desktop
-       banner. */
-    .hero-pause {
-        right: var(--s-3);
-        bottom: var(--s-3);
-    }
+    /* The pause button was tucked a step further into the corner here, the
+       banner being around 300px tall at this width. It is not drawn at this
+       width any more: 700px is where the hero becomes one still image, and a
+       carousel that does not run needs no control to stop it. */
     .service-grid,
     .figures-list,
     .transparency-list,
@@ -3724,76 +3846,20 @@ a.transparency-inner:hover .transparency-state {
     .city-update-shelf {
         grid-template-columns: minmax(0, 1fr);
     }
-    /* Flex, so the plate can be ordered ahead of the photograph. The plate is
-       the city's identity and leads the banner on the wide layout; stacking
-       must not hand that place to the photograph just because it comes first
-       in the document (where it has to, to sit underneath). */
-    .hero {
-        display: flex;
-        flex-direction: column;
-        aspect-ratio: auto;
-        max-height: none;
-    }
-    /* Whole, not cropped. The plate used to be given a height and a width
-       computed from it, which ran it off the right edge for the section to
-       clip — fair on the old artwork, whose content stopped at 49% of its
-       width, but the issued banner carries the office's lettering and all
-       four emblems out to 91%, so the same trick would cut them off.
+    /* The stacked banner used to be built here — the plate ordered above the
+       photograph, each a full-width row, with a green gradient painted into
+       the plate's transparent wedge to stand in for the photograph that was
+       no longer behind it.
 
-       So the plate takes the full viewport width and the artwork sets its own
-       height: every part of an official plate is on screen, at the exact
-       proportions it was drawn in. No ratio is declared here on purpose —
-       with the height intrinsic there is nothing for `--hero-ratio` to go
-       stale against, which is the one way the desktop layout can distort the
-       Mayor's portrait. `min-height: 0` keeps a column flex item's automatic
-       minimum (its content height) from fighting that.
-
-       The gradient fills the artwork's transparent wedge, in the green the
-       artwork itself is painted in (--field-*) rather than the bar's orange.
-       It answers to the plate it is touching, not to the bar two rows up. */
-    .hero-plate {
-        position: relative;
-        order: -1;
-        width: 100%;
-        max-width: none;
-        height: auto;
-        min-height: 0;
-        aspect-ratio: auto;
-        flex: none;
-        background: linear-gradient(
-            172deg,
-            var(--field-mid) 0%,
-            var(--field-from) 100%
-        );
-    }
-    /* Intrinsic height, so `fill` has nothing to fill against and the artwork
-       is simply itself. */
-    .hero-plate-art {
-        height: auto;
-    }
-    /* 16:9 now that nothing is laid over the photograph. The frame used to go
-       to 4:3 at this width to give the caption panel room; without the panel
-       that was only extra height between the reader and the first task.
-
-       `left: 0` because the panel is in flow here, not laid over the plate:
-       the wedge offset that puts the photograph to the right of the artwork on
-       the wide layout would, on a flow item, push its own row 613px off the
-       screen. */
-    .hero-photo-frame {
-        position: relative;
-        left: 0;
-        flex: none;
-        aspect-ratio: 16 / 9;
-        border-top: 1px solid var(--line);
-    }
-    /* Back to the foot of the banner. Above this width the photograph is the
-       layer underneath and the control sits in the plate's transparent wedge
-       at the top right; stacked, the photograph is its own row at the bottom,
-       and the wedge is the masthead gradient — a dark disc on dark green. */
-    .hero-pause {
-        top: auto;
-        bottom: var(--s-4);
-    }
+       All of it is gone, and so is the markup it styled. Below 700px the hero
+       is one opaque image and `.hero-plate`, `.hero-photo-frame` and
+       `.hero-pause` are not rendered at all — see `--- The phone banner` in
+       this file and `PHONE` in city-hero.tsx. These rules would have been
+       dead code: still parsed, still shipped, still read by the next person
+       trying to work out which arrangement a phone gets. The invented green
+       went with them, which is the part worth noting — it was a colour chosen
+       here to fill a hole in official artwork, and the office's own flattened
+       plate has no hole in it. */
 }
 
 /* --- The narrowest bar --------------------------------------------------
