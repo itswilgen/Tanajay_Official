@@ -24,6 +24,29 @@ of them.
 | `mayor-plate-900.webp` | `newTemplate.png`            | The narrow-viewport banner                                                               |
 | `hbg-masthead.webp`    | `hbg.jpg` (708KB, 6000×3000) | Cropped to 2400×480 for a 71px strip, and 5KB instead of 708KB                           |
 
+And the browser icons, in `frontend/public/` rather than `public/image/` because
+that is where a browser looks for them without being told:
+
+| Served                        | Derived from       | Why                                                                                      |
+| ----------------------------- | ------------------ | ---------------------------------------------------------------------------------------- |
+| `favicon.ico` (10KB)          | `OfficialLogo.png` | The tab. Three entries — 16, 32 and 48 — each reduced and sharpened at its own size       |
+| `apple-touch-icon.png` (40KB) | `OfficialLogo.png` | An iOS home screen, at 180px: flattened onto white, because iOS composites alpha onto black, with a 6% margin for its corner mask |
+
+Both come from `tools/icons/render_icons.py`. They replaced a `favicon.ico`
+with a single 32px entry and a `favicon.svg` that was still the **Laravel
+logo** from the starter kit — a red `#FF2D20` monogram serving as the city's
+identity in every tab, bookmark and history entry. The SVG was deleted rather
+than redrawn: the office issued the seal as a bitmap, there is no vector of it,
+and wrapping the bitmap in an `<svg>` would ship a file that claims to scale
+and does not.
+
+The rim lettering does not survive a tab, and no filter changes that. The
+black band it sits in is about a quarter of the seal's radius, which is 2
+pixels at 16px and 4 at 32px. At those sizes the seal reads by silhouette and
+colour — yellow rim, green field, red shield — and it is left to do that
+rather than being re-cut into something legible. A city's seal is prescribed,
+not styled.
+
 There used to be a `seal-256.webp` serving the masthead at 1× and `seal-512.webp`
 at 2×. Both were far more detail than a 54px slot can draw — 29KB and 73KB to
 fill 54 and 108 pixels. Rendered side by side at the real slot size, the 96px
@@ -42,6 +65,10 @@ and the 256px files are indistinguishable. Match the slot, not the artwork.
    the image is laid in with `object-fit: fill`, so a stale value does not
    letterbox — it stretches the Mayor's official portrait. That has happened
    once already, by 13%.
+4. If what was replaced is the seal, re-run the two things derived from it:
+   the icons, with `tools/icons/render_icons.py`, and the three `seal-*.webp`
+   by hand. The icon script refuses a source that is not square rather than
+   stretching the seal into an icon canvas.
 
 ## Unused
 

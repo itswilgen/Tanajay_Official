@@ -13,8 +13,24 @@
             }
         </style>
 
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <!-- The city seal, at the four sizes anything asks for it: 16, 32 and
+             48 inside the .ico, and 180 for an iOS home screen. Both are
+             generated from the issued artwork by tools/icons/render_icons.py.
+
+             No SVG icon, which a modern set would normally lead with. The
+             office issued the seal as a 1254px bitmap and there is no vector
+             of it; wrapping that bitmap in an <svg> would ship a file that
+             claims to scale and does not. The .ico covers every browser on
+             its own, so the honest set is smaller than the fashionable one.
+
+             The rim lettering does not survive a tab. It is 2px tall at 16px
+             and 4px at 32px, so at those sizes the seal reads by its
+             silhouette and its colours — yellow rim, green field, red shield
+             — and that is the ceiling for a prescribed circular seal. It is
+             not re-cut into a legible monogram, because a city's seal is
+             prescribed rather than styled and this site does not invent
+             municipal iconography. -->
+        <link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
         <!-- The two faces the masthead needs on the first paint, asked for
